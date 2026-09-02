@@ -1,0 +1,193 @@
+.root {
+  position: relative;
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 402px;
+  height: 620px;
+  transform-origin: top left;
+  background: var(--m-bg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.rotate {
+  position: absolute;
+  inset: 0;
+}
+
+.rotate[data-flip="true"] {
+  transform: rotate(180deg);
+}
+
+.rotate[data-flip="true"] .upright {
+  transform: rotate(180deg);
+}
+
+/* ------------------------------------------------------------------ decor */
+
+.tunnel {
+  position: absolute;
+  left: 150px;
+  top: 16px;
+  width: 102px;
+  bottom: 16px;
+  background: var(--m-tunnel);
+  border-left: 1px solid var(--m-edge);
+  border-right: 1px solid var(--m-edge);
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  border-top: 1px solid var(--m-rail);
+  border-bottom: 1px solid var(--m-rail);
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--m-rail) 0 1.5px,
+    transparent 1.5px 9px
+  );
+}
+
+.plate {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  height: 62px;
+  background: var(--m-plate);
+  border-radius: 4px;
+}
+
+.trackLabel {
+  position: absolute;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-rail);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--m-text);
+}
+
+.end {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--m-dim);
+}
+
+.endTop {
+  top: 8px;
+}
+
+.endBottom {
+  bottom: 8px;
+}
+
+.noEsc {
+  position: absolute;
+  border: 1px dashed var(--m-rail);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: var(--m-dim);
+}
+
+/* ------------------------------------------------------------------ chips */
+
+.hit {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.hit:focus-visible {
+  outline: none;
+}
+
+.hit:focus-visible .chip {
+  box-shadow:
+    0 0 0 3px var(--m-ring),
+    0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+.chip {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--m-chip-shadow);
+  transition:
+    box-shadow 0.15s,
+    background 0.2s;
+}
+
+.chip[data-type="lift"] {
+  flex-direction: column;
+  border-radius: 8px;
+}
+
+.chip[data-status="ok"] {
+  background: var(--m-ok);
+  color: var(--m-chip-text-ok);
+}
+
+.chip[data-status="out"] {
+  background: var(--m-out);
+  color: var(--m-chip-text-out);
+}
+
+.chip[data-selected="true"] {
+  box-shadow:
+    0 0 0 3px var(--m-ring),
+    0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+.arrow {
+  line-height: 1;
+}
+
+.liftGlyph {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 8px;
+  line-height: 1;
+}
+
+.liftBar {
+  width: 1px;
+  height: 11px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.liftCap {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  margin-top: 1px;
+}

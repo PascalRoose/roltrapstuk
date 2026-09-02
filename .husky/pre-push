@@ -1,0 +1,3 @@
+# Fuller check before code leaves your machine. Skip with `git push --no-verify`.
+npm run typecheck
+npm test

@@ -1,0 +1,33 @@
+.wrap {
+  display: flex;
+  gap: 6px;
+  background: var(--c-seg-idle);
+  border-radius: 11px;
+  padding: 4px;
+}
+
+.seg {
+  flex: 1;
+  text-align: center;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--c-sub);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.seg[data-active="true"] {
+  background: var(--c-primary-bg);
+  color: var(--c-primary-text);
+}
+
+.seg:focus-visible {
+  outline: 2px solid var(--c-primary-bg);
+  outline-offset: 2px;
+}

@@ -1,0 +1,45 @@
+name: Bug report
+description: Something in the app is broken or wrong (not an escalator — report those in the app)
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reporting that an escalator's status is wrong? Do that **in the app** — tap
+        it on the map and file a report. This form is for bugs in the app itself.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+      placeholder: |
+        1. Opened /denbosch on my phone
+        2. Tapped L4 and reported it broken
+        3. The confirmation showed but the chip stayed green
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Page / URL
+      placeholder: https://roltrapstuk.vercel.app/denbosch
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - Phone
+        - Tablet
+        - Desktop
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & OS
+      placeholder: Safari 18 on iOS 26
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, console errors, network tab — whatever helps.

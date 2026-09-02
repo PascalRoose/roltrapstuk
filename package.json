@@ -1,0 +1,62 @@
+{
+  "name": "roltrapstuk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Crowdsourced escalator and lift status for 's-Hertogenbosch train station.",
+  "license": "MIT",
+  "author": "Pascal Roose",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PascalRoose/roltrapstuk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PascalRoose/roltrapstuk/issues"
+  },
+  "homepage": "https://github.com/PascalRoose/roltrapstuk#readme",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "db:seed": "node scripts/seed.mjs",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx,mts}": [
+      "prettier --write",
+      "eslint --fix --max-warnings 0"
+    ],
+    "*.{json,css,yml,yaml}": "prettier --write"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "swr": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.4",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.4.1",
+    "prettier": "^3.9.6",
+    "typescript": "^5",
+    "vitest": "^4.1.11"
+  }
+}

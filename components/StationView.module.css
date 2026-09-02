@@ -1,0 +1,65 @@
+.app {
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-app);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mapArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+.state {
+  margin: auto;
+  color: var(--c-sub);
+  font-size: 15px;
+}
+
+.banner {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--c-sub);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.panel {
+  flex-shrink: 0;
+  max-height: 72dvh;
+  overflow-y: auto;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-border);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.12);
+}
+
+@media (min-width: 768px) {
+  .body {
+    flex-direction: row;
+  }
+
+  .mapArea {
+    padding: 28px;
+  }
+
+  .panel {
+    width: 380px;
+    max-height: none;
+    border-top: 0;
+    border-left: 1px solid var(--c-border);
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,31 @@
+name: roltrapstuk-dev
+
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm
+    command: sleep infinity
+    volumes:
+      - ..:/workspace:cached
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/roltrapstuk
+      NEXT_TELEMETRY_DISABLED: "1"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: roltrapstuk
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d roltrapstuk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:
