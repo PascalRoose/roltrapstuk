@@ -1,8 +1,14 @@
+.host {
+  flex: 1;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .root {
   position: relative;
-  width: 100%;
-  max-width: 402px;
-  margin: 0 auto;
   overflow: hidden;
 }
 
