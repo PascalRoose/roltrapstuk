@@ -1,0 +1,147 @@
+.hint {
+  padding: 16px 18px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--c-sub);
+}
+
+.detail {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+.dot[data-status="out"] {
+  background: var(--c-out);
+}
+
+.dot[data-status="ok"] {
+  background: var(--c-ok);
+}
+
+.headText {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--c-sub);
+}
+
+.id {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--c-sub);
+}
+
+.card {
+  background: var(--c-card);
+  border: 1px solid var(--c-card-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardLabel {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--c-sub);
+}
+
+.cardRow {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.cardText {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--c-text);
+}
+
+.cardTime {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--c-sub);
+  white-space: nowrap;
+}
+
+.confirm {
+  background: var(--c-confirm-bg);
+  border: 1px solid var(--c-confirm-border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.confirmTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-confirm-text);
+}
+
+.primary {
+  border: 0;
+  background: var(--c-primary-bg);
+  color: var(--c-primary-text);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.primary:focus-visible,
+.undo:focus-visible {
+  outline: 2px solid var(--c-primary-bg);
+  outline-offset: 2px;
+}
+
+.undo {
+  border: 0;
+  background: none;
+  text-align: center;
+  font-size: 14px;
+  color: var(--c-sub);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.undo:disabled {
+  opacity: 0.6;
+}

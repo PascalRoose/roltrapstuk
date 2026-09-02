@@ -1,0 +1,44 @@
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--c-text);
+  text-wrap: pretty;
+}
+
+.label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--c-sub);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.primary {
+  border: 0;
+  background: var(--c-primary-bg);
+  color: var(--c-primary-text);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--c-primary-bg);
+  outline-offset: 2px;
+}

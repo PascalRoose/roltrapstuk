@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: A specific escalator or lift is wrong
+    url: https://roltrapstuk.vercel.app
+    about: Report that in the app — tap it on the map and file a report.
+  - name: Security vulnerability
+    url: https://github.com/PascalRoose/roltrapstuk/security/advisories/new
+    about: Please report privately via a security advisory, not a public issue.
