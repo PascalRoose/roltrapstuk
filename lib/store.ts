@@ -50,7 +50,6 @@ function makePostgresStore(): Store {
         from reports
         where station = ${station}
         order by created_at desc
-        limit 4000
       `) as Array<{
         unit_id: string;
         kind: ReportKind;
