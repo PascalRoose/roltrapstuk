@@ -26,6 +26,7 @@ export interface Strings {
   why1: string;
   why2: string;
   gotIt: string;
+  sourceCode: string;
   settings: string;
   language: string;
   appearance: string;
@@ -69,6 +70,7 @@ const en: Strings = {
   why1: "Half the escalators at 's-Hertogenbosch seem to be standing still, and you only find out when you are already at the bottom of the stairs with a suitcase.",
   why2: "Nobody publishes that. So travellers keep it up to date here: tap anything on the map to see the last report, then tap the button to say whether it is broken or running again.",
   gotIt: "Got it",
+  sourceCode: "Source code on GitHub",
   settings: "Settings",
   language: "LANGUAGE",
   appearance: "APPEARANCE",
@@ -112,6 +114,7 @@ const nl: Strings = {
   why1: "De helft van de roltrappen op 's-Hertogenbosch staat stil, en je merkt het pas als je met je koffer onderaan de trap staat.",
   why2: "Niemand publiceert dat. Reizigers houden het hier bij: tik op de kaart voor de laatste melding en meld daarna zelf of iets kapot is of weer loopt.",
   gotIt: "Duidelijk",
+  sourceCode: "Broncode op GitHub",
   settings: "Instellingen",
   language: "TAAL",
   appearance: "WEERGAVE",
