@@ -7,6 +7,27 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
+  animation: scrimIn 0.2s ease both;
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .modal {
@@ -21,6 +42,7 @@
   width: 100%;
   max-height: calc(100dvh - 48px);
   overflow-y: auto;
+  animation: modalIn 0.3s cubic-bezier(0.2, 0.8, 0.3, 1.05) both;
 }
 
 .modal:focus {

@@ -184,6 +184,21 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
   const t = strings(lang);
   const track = lang === "nl" ? "Spoor" : "Track";
 
+  // Ambient trains on every other track, alternating direction. Each has its
+  // own slow tempo and a negative delay so a train drifts past only now and
+  // then, never in lockstep. They render behind the tunnel (see below).
+  const RAIL_H = 8;
+  const TRAIN_H = 12;
+  const trains = station.rails
+    .filter((_, i) => i % 2 === 1)
+    .map((r, i) => ({
+      // centre the train body on the rail band
+      top: r.top + RAIL_H / 2 - TRAIN_H / 2,
+      dir: i % 2 === 0 ? "rtl" : ("ltr" as const),
+      dur: 32 + i * 7,
+      delay: -(i * 17),
+    }));
+
   const statusOf = (id: string) => state?.units[id]?.status ?? "ok";
   const statusWord = (id: string) => (statusOf(id) === "out" ? t.out : t.working);
 
@@ -296,11 +311,24 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
         style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${scale})` }}
       >
         <div className={styles.rotate} data-flip={flip}>
-          <div className={styles.tunnel} />
-
           {station.rails.map((r) => (
             <div key={r.top} className={styles.rail} style={{ top: r.top }} />
           ))}
+
+          <div className={styles.trainField} aria-hidden>
+            {trains.map((tr) => (
+              <div
+                key={tr.top}
+                className={styles.train}
+                data-dir={tr.dir}
+                style={{
+                  top: tr.top,
+                  animationDuration: `${tr.dur}s`,
+                  animationDelay: `${tr.delay}s`,
+                }}
+              />
+            ))}
+          </div>
 
           {station.plates.map((p) => (
             <div key={p.top} className={styles.plate} style={{ top: p.top }} />
@@ -316,15 +344,19 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
             </div>
           ))}
 
+          <div className={`${styles.noEsc} ${styles.upright}`} style={station.noEscalatorBox}>
+            {station.noEscalator[lang]}
+          </div>
+
+          {/* The tunnel bridges over the tracks and platforms, so it paints
+              after them — but under the entrance labels, escalators and lifts. */}
+          <div className={styles.tunnel} />
+
           <div className={`${styles.end} ${styles.endTop} ${styles.upright}`}>
             {station.ends.top[lang]}
           </div>
           <div className={`${styles.end} ${styles.endBottom} ${styles.upright}`}>
             {station.ends.bottom[lang]}
-          </div>
-
-          <div className={`${styles.noEsc} ${styles.upright}`} style={station.noEscalatorBox}>
-            {station.noEscalator[lang]}
           </div>
 
           {station.units.map((u) => {
