@@ -53,7 +53,7 @@ export function DetailPanel({
   const doneText = justReported === "out" ? t.doneOut : t.doneOk;
 
   return (
-    <div className={styles.detail}>
+    <div className={styles.detail} key={unit.id}>
       <div className={styles.head}>
         <span className={styles.dot} data-status={status} aria-hidden />
         <div className={styles.headText}>

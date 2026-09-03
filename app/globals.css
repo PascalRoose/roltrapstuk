@@ -16,6 +16,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: var(--c-app);
   color: var(--c-text);
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 }
 
 /* ---------------------------------------------------------------- palette */
@@ -44,7 +47,7 @@ body {
   --c-seg-idle: #f0ede5;
 
   --m-bg: #f2efe8;
-  --m-tunnel: #ffffff;
+  --m-tunnel: var(--m-plate); /* tunnel + platforms read as one structure */
   --m-edge: #c7c0b2;
   --m-rail: #b6afa2;
   --m-plate: #dcd7cc;
@@ -56,6 +59,9 @@ body {
   --m-chip-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   --m-chip-text-ok: #ffffff;
   --m-chip-text-out: #ffffff;
+  --m-train: #9aa4b0;
+  --m-train-hi: #b4bcc6;
+  --m-train-win: #e6e9ee;
 }
 
 :root[data-theme="dark"] {
@@ -81,7 +87,7 @@ body {
   --c-seg-idle: #1e252d;
 
   --m-bg: #0e1216;
-  --m-tunnel: #1a2026;
+  --m-tunnel: var(--m-plate);
   --m-edge: #2c343c;
   --m-rail: #39424b;
   --m-plate: #232b33;
@@ -93,6 +99,9 @@ body {
   --m-chip-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
   --m-chip-text-ok: #0b0e12;
   --m-chip-text-out: #ffffff;
+  --m-train: #47535f;
+  --m-train-hi: #5b6874;
+  --m-train-win: #1a222c;
 }
 
 /* JS disabled: honour the OS preference */
@@ -118,7 +127,7 @@ body {
     --c-seg-idle: #1e252d;
 
     --m-bg: #0e1216;
-    --m-tunnel: #1a2026;
+    --m-tunnel: var(--m-plate);
     --m-edge: #2c343c;
     --m-rail: #39424b;
     --m-plate: #232b33;
@@ -127,8 +136,15 @@ body {
     --m-ring: #ffc61e;
     --m-chip-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
     --m-chip-text-ok: #0b0e12;
+    --m-train: #6d92bd;
+    --m-train-hi: #8fb0d4;
+    --m-train-win: #17222f;
   }
 }
+
+/* Keyframes live in the CSS modules that use them: Turbopack scopes
+   `animation-name` identifiers per-module, so a module can't reference a
+   keyframe declared out here. Shared motion tokens: */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -136,6 +152,7 @@ body {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 

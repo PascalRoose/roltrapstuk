@@ -26,11 +26,11 @@ export function Header({ station, lang, summary, onInfo, onSettings }: Props) {
 
       <div className={styles.summary}>
         <span className={styles.count}>
-          <i className={styles.dotOut} aria-hidden />
+          <i className={styles.dotOut} data-on={!!summary && summary.out > 0} aria-hidden />
           {summary ? summary.out : "–"} {t.outShort}
         </span>
         <span className={styles.count}>
-          <i className={styles.dotOk} aria-hidden />
+          <i className={styles.dotOk} data-on={!!summary && summary.ok > 0} aria-hidden />
           {summary ? summary.ok : "–"} {t.okShort}
         </span>
       </div>

@@ -44,6 +44,13 @@
   background: var(--c-surface);
   border-top: 1px solid var(--c-border);
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.12);
+  transition:
+    box-shadow 0.35s ease,
+    max-height 0.35s ease;
+}
+
+.panel[data-open="true"] {
+  box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.18);
 }
 
 @media (min-width: 768px) {

@@ -21,6 +21,16 @@
   transform-origin: 0 0;
   background: var(--m-bg);
   font-family: var(--font-sans), system-ui, sans-serif;
+  animation: mapFade 0.6s ease both;
+}
+
+@keyframes mapFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .controls {
@@ -44,6 +54,17 @@
   line-height: 1;
   cursor: pointer;
   box-shadow: var(--m-chip-shadow);
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
+}
+
+.controlBtn:hover:not(:disabled) {
+  background-color: var(--m-plate);
+}
+
+.controlBtn:active:not(:disabled) {
+  transform: scale(0.92);
 }
 
 .controlBtn:disabled {
@@ -66,15 +87,16 @@
 
 /* ------------------------------------------------------------------ decor */
 
+/* Same fill as the platforms so the corridor and platforms read as one
+   structure. Pulled in from the canvas edges to leave a band above and below
+   for the entrance names. */
 .tunnel {
   position: absolute;
   left: 150px;
-  top: 16px;
+  top: 34px;
   width: 102px;
-  bottom: 16px;
+  bottom: 34px;
   background: var(--m-tunnel);
-  border-left: 1px solid var(--m-edge);
-  border-right: 1px solid var(--m-edge);
 }
 
 .rail {
@@ -127,7 +149,7 @@
 }
 
 .endBottom {
-  bottom: 8px;
+  bottom: 10px;
 }
 
 .noEsc {
@@ -142,6 +164,74 @@
   font-size: 8px;
   letter-spacing: 0.06em;
   color: var(--m-dim);
+}
+
+/* ----------------------------------------------------------------- trains */
+
+.trainField {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.train {
+  position: absolute;
+  left: 0;
+  width: 104px;
+  height: 12px;
+  border-radius: 5px;
+  /* Opaque so it fully hides the track it runs on. */
+  background: linear-gradient(to bottom, var(--m-train-hi), var(--m-train) 62%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  will-change: transform;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 34s;
+}
+
+/* window band */
+.train::before {
+  content: "";
+  position: absolute;
+  inset: 3px 9px;
+  border-radius: 2px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--m-train-win) 0 4px,
+    transparent 4px 13px
+  );
+  opacity: 0.65;
+}
+
+.train[data-dir="ltr"] {
+  animation-name: trainLtr;
+}
+
+.train[data-dir="rtl"] {
+  animation-name: trainRtl;
+}
+
+/* Most of the cycle is spent parked off-screen so a train drifts past only
+   now and then. */
+@keyframes trainLtr {
+  0% {
+    transform: translateX(-120px);
+  }
+  38%,
+  100% {
+    transform: translateX(405px);
+  }
+}
+
+@keyframes trainRtl {
+  0% {
+    transform: translateX(405px);
+  }
+  38%,
+  100% {
+    transform: translateX(-120px);
+  }
 }
 
 /* ------------------------------------------------------------------ chips */
@@ -176,7 +266,62 @@
   box-shadow: var(--m-chip-shadow);
   transition:
     box-shadow 0.15s,
-    background 0.2s;
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.18s ease;
+}
+
+.hit:hover .chip {
+  transform: scale(1.06);
+}
+
+.hit:active .chip {
+  transform: scale(0.97);
+}
+
+/* A slow coloured halo — green when working, red when out. */
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Every chip pulses on the same clock — same duration, no per-chip delay. */
+.chip[data-status="ok"]::after {
+  animation: pulseOk 2.4s ease-out infinite;
+}
+
+.chip[data-status="out"]::after {
+  animation: pulseOut 2.4s ease-out infinite;
+}
+
+.chip[data-selected="true"]::after,
+.hit:focus-visible .chip::after {
+  animation: none;
+}
+
+/* A small expanding ring in the status colour — kept tight so neighbouring
+   chips' pulses don't run into each other. */
+@keyframes pulseOk {
+  0% {
+    box-shadow: 0 0 0 0 rgba(25, 169, 116, 0.4);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(25, 169, 116, 0);
+  }
+}
+
+@keyframes pulseOut {
+  0% {
+    box-shadow: 0 0 0 0 rgba(226, 58, 46, 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 5px rgba(226, 58, 46, 0);
+  }
 }
 
 .chip[data-type="lift"] {
@@ -198,6 +343,7 @@
   box-shadow:
     0 0 0 3px var(--m-ring),
     0 6px 16px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
 }
 
 .arrow {
