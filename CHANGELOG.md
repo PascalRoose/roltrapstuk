@@ -4,6 +4,18 @@ All notable changes to this project are documented here. From 0.1.0 onward this
 file is maintained by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [0.1.2](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.1...roltrapstuk-v0.1.2) (2026-09-03)
+
+
+### Features
+
+* make the station map zoomable and pannable ([#11](https://github.com/PascalRoose/roltrapstuk/issues/11)) ([4a611bc](https://github.com/PascalRoose/roltrapstuk/commit/4a611bc49d73e0a4505edfbf65acc1f1127912f7))
+
+
+### Bug Fixes
+
+* scale station map to fit viewport height ([#8](https://github.com/PascalRoose/roltrapstuk/issues/8)) ([644b616](https://github.com/PascalRoose/roltrapstuk/commit/644b616d82b73d435713cd7f85f3cc0c6d1c7a0d))
+
 ## [0.1.1](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.0...roltrapstuk-v0.1.1) (2026-09-02)
 
 
