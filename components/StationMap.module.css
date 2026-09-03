@@ -1,15 +1,15 @@
 .host {
+  position: relative;
   flex: 1;
   min-height: 0;
   align-self: stretch;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
 }
 
-.root {
-  position: relative;
-  overflow: hidden;
+.host:active {
+  cursor: grabbing;
 }
 
 .canvas {
@@ -18,9 +18,37 @@
   left: 0;
   width: 402px;
   height: 620px;
-  transform-origin: top left;
+  transform-origin: 0 0;
   background: var(--m-bg);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.controls {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+}
+
+.controlBtn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--m-edge);
+  border-radius: 8px;
+  background: var(--m-bg);
+  color: var(--m-text);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--m-chip-shadow);
+}
+
+.controlBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .rotate {
