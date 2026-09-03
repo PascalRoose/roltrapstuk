@@ -42,6 +42,9 @@ export interface Strings {
   yesterday: string;
   daysAgo: (n: number) => string;
   offline: string;
+  zoomIn: string;
+  zoomOut: string;
+  zoomReset: string;
 }
 
 const en: Strings = {
@@ -86,6 +89,9 @@ const en: Strings = {
   yesterday: "Yesterday",
   daysAgo: (n) => `${n} days ago`,
   offline: "Can't reach the server — showing the last known status",
+  zoomIn: "Zoom in",
+  zoomOut: "Zoom out",
+  zoomReset: "Reset zoom",
 };
 
 const nl: Strings = {
@@ -130,6 +136,9 @@ const nl: Strings = {
   yesterday: "Gisteren",
   daysAgo: (n) => `${n} dagen geleden`,
   offline: "Server niet bereikbaar — laatst bekende status wordt getoond",
+  zoomIn: "Inzoomen",
+  zoomOut: "Uitzoomen",
+  zoomReset: "Zoom herstellen",
 };
 
 const TABLE: Record<Lang, Strings> = { en, nl };
