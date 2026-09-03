@@ -10,8 +10,6 @@ const H = 620;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 1.5;
-/** Keep a selected unit at least this far from the visible edge. */
-const IN_VIEW_MARGIN = 24;
 
 interface Props {
   station: StationDef;
@@ -69,6 +67,12 @@ function visualRect(box: UnitBox, flip: boolean) {
   };
 }
 
+/** Centre point of a unit's visual bounding box, in canvas coordinates. */
+function unitCenter(box: UnitBox, flip: boolean): Point {
+  const rect = visualRect(box, flip);
+  return { x: (rect.left + rect.right) / 2, y: (rect.top + rect.bottom) / 2 };
+}
+
 function computePanForZoom(newZoom: number, focal: Point, from: View, fitScale: number): Point {
   const oldScale = fitScale * from.zoom;
   const newScale = fitScale * newZoom;
@@ -98,32 +102,28 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
   const content: Size = { w: W * scale, h: H * scale };
   const pan = clampPan(view.pan, content, measured);
 
-  // Bring a newly selected unit into view, once, without fighting the
-  // traveller's own panning/zooming afterwards. Same render-time-adjustment
-  // pattern as above.
+  // Keep a newly selected unit centred in whatever's currently visible —
+  // recomputed on every render (not just once) so it stays correct as the
+  // detail panel finishes opening and the host's measured size settles,
+  // which happens a render or two after `selected` itself changes. A manual
+  // pan/zoom (see the gesture and zoom handlers below) cancels the follow so
+  // it never fights the traveller's own navigation.
+  const [followId, setFollowId] = useState<string | null>(null);
   const [prevSelected, setPrevSelected] = useState<string | null>(null);
   if (selected !== prevSelected) {
     setPrevSelected(selected);
-    const unit = selected ? station.units.find((u) => u.id === selected) : undefined;
+    setFollowId(selected);
+  }
+  if (followId != null) {
+    const unit = station.units.find((u) => u.id === followId);
     if (unit) {
-      const rect = visualRect(unit.box, flip);
-      const left = rect.left * scale;
-      const top = rect.top * scale;
-      const right = rect.right * scale;
-      const bottom = rect.bottom * scale;
-      let { x, y } = pan;
-      const visLeft = x + left;
-      const visRight = x + right;
-      const visTop = y + top;
-      const visBottom = y + bottom;
-      if (visLeft < IN_VIEW_MARGIN) x += IN_VIEW_MARGIN - visLeft;
-      else if (visRight > measured.w - IN_VIEW_MARGIN)
-        x -= visRight - (measured.w - IN_VIEW_MARGIN);
-      if (visTop < IN_VIEW_MARGIN) y += IN_VIEW_MARGIN - visTop;
-      else if (visBottom > measured.h - IN_VIEW_MARGIN)
-        y -= visBottom - (measured.h - IN_VIEW_MARGIN);
-      const newPan = clampPan({ x, y }, content, measured);
-      if (newPan.x !== pan.x || newPan.y !== pan.y) setView((v) => ({ ...v, pan: newPan }));
+      const center = unitCenter(unit.box, flip);
+      const target = clampPan(
+        { x: measured.w / 2 - center.x * scale, y: measured.h / 2 - center.y * scale },
+        content,
+        measured,
+      );
+      if (target.x !== pan.x || target.y !== pan.y) setView((v) => ({ ...v, pan: target }));
     }
   }
 
@@ -169,6 +169,7 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
       const rect = el.getBoundingClientRect();
       const focal = { x: e.clientX - rect.left, y: e.clientY - rect.top };
       const factor = Math.exp(-e.deltaY * 0.0015);
+      setFollowId(null);
       setView((v) => {
         const newZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, v.zoom * factor));
         const pan = computePanForZoom(newZoom, focal, v, fitScale);
@@ -224,6 +225,7 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
       if (!g.moved && Math.hypot(dx, dy) > 4) g.moved = true;
       if (!g.moved) return;
       e.preventDefault();
+      setFollowId(null);
       setView((v) => ({
         ...v,
         pan: clampPan({ x: g.startPan.x + dx, y: g.startPan.y + dy }, content, measured),
@@ -241,6 +243,7 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
         fitScale,
       );
       const s = fitScale * newZoom;
+      setFollowId(null);
       setView({ zoom: newZoom, pan: clampPan(pan, { w: W * s, h: H * s }, measured) });
     }
   };
@@ -263,6 +266,7 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
 
   const stepZoom = (factor: number) => {
     const focal = { x: measured.w / 2, y: measured.h / 2 };
+    setFollowId(null);
     setView((v) => {
       const newZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, v.zoom * factor));
       const pan = computePanForZoom(newZoom, focal, v, fitScale);
@@ -271,7 +275,10 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
     });
   };
 
-  const resetZoom = () => setView({ zoom: MIN_ZOOM, pan: { x: 0, y: 0 } });
+  const resetZoom = () => {
+    setFollowId(null);
+    setView({ zoom: MIN_ZOOM, pan: { x: 0, y: 0 } });
+  };
 
   return (
     <div
