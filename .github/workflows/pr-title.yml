@@ -2,13 +2,14 @@ name: PR title
 
 on:
   pull_request_target:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, edited, synchronize, reopened, ready_for_review]
 
 permissions:
   pull-requests: read
 
 jobs:
   lint:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       # Enforces a Conventional Commits PR title, which becomes the squash-merge
