@@ -48,6 +48,19 @@ export function StationView({ slug, initialState }: { slug: string; initialState
     return () => clearInterval(id);
   }, []);
 
+  // Open the info screen the first time someone lands on the site. Deferred to a
+  // microtask so it lands after hydration (the server render has no modal).
+  useEffect(() => {
+    const KEY = "roltrapstuk.infoSeen";
+    try {
+      if (localStorage.getItem(KEY) != null) return;
+      localStorage.setItem(KEY, "1");
+    } catch {
+      return;
+    }
+    queueMicrotask(() => setModal("info"));
+  }, []);
+
   const selectedUnit = useMemo(
     () => station?.units.find((u) => u.id === selected) ?? null,
     [station, selected],
