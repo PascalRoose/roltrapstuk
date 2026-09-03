@@ -4,6 +4,19 @@ All notable changes to this project are documented here. From 0.1.0 onward this
 file is maintained by [release-please](https://github.com/googleapis/release-please)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [0.1.3](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.2...roltrapstuk-v0.1.3) (2026-09-03)
+
+
+### Features
+
+* add subtle ambient motion to the station view ([#17](https://github.com/PascalRoose/roltrapstuk/issues/17)) ([cb1bc7c](https://github.com/PascalRoose/roltrapstuk/commit/cb1bc7ce2ac0eb108049ddff248cac081bf2e39b))
+* open infoscreen upon first visit ([#16](https://github.com/PascalRoose/roltrapstuk/issues/16)) ([7261cfd](https://github.com/PascalRoose/roltrapstuk/commit/7261cfd0d297a896c2ced82e9ea2c805612a8fd0))
+
+
+### Bug Fixes
+
+* changed about text and removed the words 'again' ([#14](https://github.com/PascalRoose/roltrapstuk/issues/14)) ([f4d5385](https://github.com/PascalRoose/roltrapstuk/commit/f4d53859d04c66270694948d8e3781df7147a949))
+
 ## [0.1.2](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.1...roltrapstuk-v0.1.2) (2026-09-03)
 
 
