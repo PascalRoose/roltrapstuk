@@ -54,6 +54,8 @@ Node 20 and 22 for every push and PR (`.github/workflows/ci.yml`). Also wired up
 - **CodeQL** SAST — `security-and-quality` queries, weekly + on every change.
 - **Dependency review** on PRs and **Dependabot** (npm + GitHub Actions, weekly).
 - **gitleaks** secret scanning over the full history.
+- **commitlint** on every PR commit, and a **Release preview** comment showing
+  the version the merge will publish.
 
 Tests cover the report-log aggregation (`lib/aggregate.ts`), relative-time
 formatting, the i18n dictionaries, and the `/api/reports` route handlers
@@ -62,11 +64,12 @@ formatting, the i18n dictionaries, and the `/api/reports` route handlers
 ## Releases
 
 Versioning follows [Conventional Commits](https://www.conventionalcommits.org/)
-via [release-please](https://github.com/googleapis/release-please): merging
-`feat:` / `fix:` commits to `main` makes the bot open a release PR that bumps the
-version and updates [`CHANGELOG.md`](CHANGELOG.md); merging that PR tags the
-release and publishes GitHub Release notes. Pre-1.0, `feat:` bumps the minor and
-`fix:` the patch. See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+via [semantic-release](https://github.com/semantic-release/semantic-release):
+every push to `main` runs the release workflow, which bumps the version, updates
+[`CHANGELOG.md`](CHANGELOG.md), commits both back to `main`, tags the release and
+publishes GitHub Release notes — no release PR. Pushes with nothing releasable
+are a no-op. `fix:` bumps the patch version, `feat:` the minor, and a breaking
+change the major. See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 ### Database
 

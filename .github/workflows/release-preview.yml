@@ -1,0 +1,84 @@
+name: Release preview
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    # Needs a same-repo branch (checkout by ref) and a writable token; skip forks.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write # semantic-release --dry-run still runs a `git push --dry-run` auth check; nothing is pushed
+      pull-requests: write # post/update the preview comment
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }} # the PR branch itself, not the merge ref
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - run: npm ci
+
+      # Run semantic-release against the PR branch in dry-run mode with only the
+      # analysis plugins, so it reports the version and notes without touching
+      # git, GitHub or npm. The result is rendered into comment.md.
+      - name: Build preview comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_COLOR: "0"
+          HEAD_REF: ${{ github.head_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -o pipefail
+          npx --no-install semantic-release \
+            --dry-run \
+            --no-ci \
+            --branches "$HEAD_REF" \
+            --tag-format 'roltrapstuk-v${version}' \
+            --plugins '@semantic-release/commit-analyzer,@semantic-release/release-notes-generator' \
+            2>&1 | tee release.log || true
+
+          version="$(grep -oE 'The next release version is [0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' release.log | grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' | head -n1)"
+
+          {
+            echo "### 📦 Release preview"
+            echo
+            if [ -n "$version" ]; then
+              echo "Merging this PR will publish **roltrapstuk-v${version}**."
+              notes="$(awk '/Release note for version/{f=1;next} /^\[[0-9]+:[0-9]+/{f=0} f' release.log)"
+              if [ -n "$notes" ]; then
+                echo
+                echo "<details><summary>Release notes</summary>"
+                echo
+                echo "$notes"
+                echo
+                echo "</details>"
+              fi
+            else
+              echo "No release — the commits on this branch don't trigger a version bump."
+            fi
+            echo
+            echo "<sub>Updated for ${HEAD_SHA}</sub>"
+          } > comment.md
+
+          cat comment.md
+
+      - name: Post preview comment
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: release-preview
+          path: comment.md

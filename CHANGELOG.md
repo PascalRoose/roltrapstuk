@@ -1,7 +1,7 @@
 # Changelog
 
 All notable changes to this project are documented here. From 0.1.0 onward this
-file is maintained by [release-please](https://github.com/googleapis/release-please)
+file is maintained by [semantic-release](https://github.com/semantic-release/semantic-release)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## [0.1.2](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.1...roltrapstuk-v0.1.2) (2026-09-03)

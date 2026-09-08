@@ -47,12 +47,14 @@ npm run build
 
 CI runs all of these on Node 20 and 22.
 
-## Commits and PR titles
+## Commits
 
 This repo uses [Conventional Commits](https://www.conventionalcommits.org/).
-`release-please` reads them to produce the changelog and version bumps, so the
-**PR title** must be a conventional message (it's checked in CI and becomes the
-squash-merge commit):
+`semantic-release` reads the commits that land on `main` to produce the changelog
+and version bumps, so **every commit message** must be a conventional message —
+`commitlint` (config in [`commitlint.config.mjs`](../commitlint.config.mjs))
+checks each one locally via the Husky `commit-msg` hook and again in CI on every
+PR commit.
 
 ```
 feat: add Utrecht Centraal
@@ -60,8 +62,15 @@ fix: undo now clears the confirmation on desktop
 docs: explain the in-memory fallback
 ```
 
-While the project is pre-1.0, `feat:` bumps the minor version and `fix:` the
-patch version.
+PRs are merged with a **merge commit** (not squashed), so the individual commits
+are what get released — keep the branch history clean. A `Release preview`
+comment on the PR shows the version and notes the merge will publish.
+
+Every push to `main` runs the release workflow directly — there is no release
+PR. It bumps the version, updates `CHANGELOG.md`, commits both back to `main`,
+tags, and publishes a GitHub Release; a push with no releasable commits is a
+no-op. `fix:` bumps the patch version, `feat:` the minor, and a breaking change
+(`!` or a `BREAKING CHANGE:` footer) the major.
 
 ## Adding a station
 
