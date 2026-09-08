@@ -57,7 +57,7 @@ jobs:
             if [ -n "$until" ]; then
               url="${url}&until=${until}"
             fi
-            page="$(curl -sS -H "$auth" "$url")"
+            page="$(curl -fsS -H "$auth" "$url")"
 
             match="$(printf '%s' "$page" | jq -r \
               --arg b "$BRANCH" \
