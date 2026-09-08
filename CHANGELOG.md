@@ -4,6 +4,16 @@ All notable changes to this project are documented here. From 0.1.0 onward this
 file is maintained by [semantic-release](https://github.com/semantic-release/semantic-release)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [1.0.0](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.2.0...roltrapstuk-v1.0.0) (2026-09-08)
+
+### ⚠ BREAKING CHANGES
+
+* first major release ([918e739](https://github.com/PascalRoose/roltrapstuk/commit/918e739bbf9c629a717e973ba65995d088812260))
+
+### Bug Fixes
+
+* preserve commit-analyzer options in release preview dry-run ([0bf414e](https://github.com/PascalRoose/roltrapstuk/commit/0bf414e22647b461333285cb89d6c5b924dfa940))
+
 ## [0.2.0](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.2...roltrapstuk-v0.2.0) (2026-09-08)
 
 ### Features
