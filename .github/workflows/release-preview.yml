@@ -33,33 +33,36 @@ jobs:
 
       - run: npm ci
 
-      # Run semantic-release against the PR branch in dry-run mode with only the
+      # Runs semantic-release against the PR branch in dry-run mode with only the
       # analysis plugins, so it reports the version and notes without touching
-      # git, GitHub or npm. The result is rendered into comment.md.
+      # git, GitHub or npm. The GITHUB_* overrides make its CI detection see a
+      # push to the PR branch instead of a pull request, which it refuses to
+      # release from. The result is rendered into comment.md.
       - name: Build preview comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FORCE_COLOR: "0"
           HEAD_REF: ${{ github.head_ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GITHUB_EVENT_NAME: push
+          GITHUB_REF: refs/heads/${{ github.head_ref }}
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          set -o pipefail
           npx --no-install semantic-release \
             --dry-run \
-            --no-ci \
             --branches "$HEAD_REF" \
             --tag-format 'roltrapstuk-v${version}' \
             --plugins '@semantic-release/commit-analyzer,@semantic-release/release-notes-generator' \
             2>&1 | tee release.log || true
 
-          version="$(grep -oE 'The next release version is [0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' release.log | grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' | head -n1)"
+          version="$(grep -oE 'The next release version is [0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' release.log | grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' | head -n1 || true)"
 
           {
             echo "### 📦 Release preview"
             echo
             if [ -n "$version" ]; then
               echo "Merging this PR will publish **roltrapstuk-v${version}**."
-              notes="$(awk '/Release note for version/{f=1;next} /^\[[0-9]+:[0-9]+/{f=0} f' release.log)"
+              notes="$(awk '/Release note for version/{f=1;next} /^\[[0-9]+:[0-9]+/{f=0} f' release.log | sed 's/^ \{1,4\}//' || true)"
               if [ -n "$notes" ]; then
                 echo
                 echo "<details><summary>Release notes</summary>"
