@@ -39,6 +39,16 @@ jobs:
       # build, so the CI env vars are unset for this step and it falls back to
       # plain-git detection of the checked-out PR branch. The result is rendered
       # into comment.md.
+      #
+      # The plugin list is trimmed in .releaserc.json itself rather than
+      # passed via --plugins, so the commit-analyzer/release-notes-generator
+      # options (the conventionalcommits preset and the custom `breaking` ->
+      # major releaseRule) are kept intact instead of falling back to the
+      # angular preset's defaults, which don't recognise the `breaking`
+      # commit type. (--extends merges plugin arrays by index instead of
+      # replacing them, so overwriting the file directly is used instead.)
+      # The checkout is discarded after the job, so mutating it in place is
+      # safe.
       - name: Build preview comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,11 +59,22 @@ jobs:
           unset GITHUB_ACTIONS GITHUB_EVENT_NAME GITHUB_REF GITHUB_SHA \
             GITHUB_RUN_ID GITHUB_HEAD_REF GITHUB_BASE_REF GITHUB_EVENT_PATH CI
 
+          node -e "
+            const fs = require('fs');
+            const cfg = JSON.parse(fs.readFileSync('.releaserc.json', 'utf8'));
+            const analysisPlugins = new Set([
+              '@semantic-release/commit-analyzer',
+              '@semantic-release/release-notes-generator',
+            ]);
+            cfg.branches = [process.env.HEAD_REF];
+            cfg.plugins = cfg.plugins.filter((p) =>
+              analysisPlugins.has(Array.isArray(p) ? p[0] : p),
+            );
+            fs.writeFileSync('.releaserc.json', JSON.stringify(cfg, null, 2));
+          "
+
           npx --no-install semantic-release \
             --dry-run \
-            --branches "$HEAD_REF" \
-            --tag-format 'roltrapstuk-v${version}' \
-            --plugins '@semantic-release/commit-analyzer,@semantic-release/release-notes-generator' \
             > release.log 2>&1 || true
           cat release.log
 
