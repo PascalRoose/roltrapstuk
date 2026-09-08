@@ -29,8 +29,8 @@ export const denBosch: StationDef = {
     { side: "r", top: 342, text: "4b" },
     { side: "l", top: 397, text: "6a" },
     { side: "r", top: 397, text: "6b" },
-    { side: "l", top: 482, text: "7" },
-    { side: "r", top: 482, text: "7" },
+    { side: "l", top: 482, text: "7a" },
+    { side: "r", top: 482, text: "7b" },
   ],
 
   units: [
