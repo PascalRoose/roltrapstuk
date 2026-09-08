@@ -84,7 +84,7 @@ jobs:
             [ -n "$id" ] || continue
             code="$(curl -sS -o /dev/null -w '%{http_code}' -X DELETE \
               -H "$auth" "${api}/v13/deployments/${id}?${team_qs#&}")"
-            if [ "$code" = "200" ]; then
+            if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
               echo "  deleted ${id}"
             else
               echo "  FAILED ${id} (HTTP ${code})" >&2
