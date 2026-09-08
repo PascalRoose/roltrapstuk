@@ -11,8 +11,10 @@ Quick reference:
   `node_modules/next/dist/docs/` for framework APIs rather than memory.
 - Run `npm run format && npm run lint && npm run typecheck && npm test && npm run build`
   before treating a change as done. CI runs the same on Node 20 and 22.
-- **Conventional Commits** (the PR title is enforced and drives releases).
-  Prettier owns formatting; a pre-commit hook runs `lint-staged`.
+- **Conventional Commits** (every commit is `commitlint`-checked and drives
+  `semantic-release`, which releases on every push to `main`). Prettier owns
+  formatting; a pre-commit hook runs `lint-staged`, a commit-msg hook runs
+  `commitlint`.
 - Data model: an append-only report log folded into a three-state traffic light
   per unit (`ok` / `unsure` / `out`) — two same-way reports to settle a unit
   broken or working, one opposite report cancels an `unsure`. One active report

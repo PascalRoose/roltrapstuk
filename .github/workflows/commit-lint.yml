@@ -1,0 +1,27 @@
+name: Commit lint
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commit-lint-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks every commit on the PR against commitlint.config.mjs (Conventional
+      # Commits). With merge-commit merging, these are the commits that land on
+      # main and that semantic-release reads, so they must be well-formed.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: commitlint.config.mjs

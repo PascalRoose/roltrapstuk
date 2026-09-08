@@ -51,8 +51,12 @@ on memory. In particular: route `params` and `searchParams` are `Promise`s;
 
 ## Conventions & gotchas
 
-- **Conventional Commits** — the PR title is checked in CI and drives
-  release-please. Pre-1.0: `feat:` bumps minor, `fix:` bumps patch.
+- **Conventional Commits** — every commit message is checked in CI by
+  `commitlint` (`.github/workflows/commit-lint.yml`) and drives `semantic-release`,
+  which cuts a release on every push to `main` (no release PR; see
+  `.releaserc.json` and `.github/workflows/release.yml`). PRs merge with a merge
+  commit, not squash, so the branch commits are what get released. `fix:` →
+  patch, `feat:` → minor, breaking change → major.
 - **Prettier owns formatting** (`.prettierrc.json`); ESLint is `eslint-config-next`
   + `eslint-config-prettier`. A pre-commit hook runs `lint-staged`.
 - **Tests**: pure logic in `lib/*.test.ts`; the route handlers are tested against

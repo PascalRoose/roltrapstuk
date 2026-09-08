@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/semantic-release.json",
+  "branches": ["main"],
+  "tagFormat": "roltrapstuk-v${version}",
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "Features" },
+            { "type": "fix", "section": "Bug Fixes" },
+            { "type": "perf", "section": "Performance" },
+            { "type": "revert", "section": "Reverts" },
+            { "type": "docs", "section": "Documentation" },
+            { "type": "refactor", "section": "Refactoring" },
+            { "type": "build", "section": "Build System", "hidden": true },
+            { "type": "ci", "section": "CI", "hidden": true },
+            { "type": "chore", "section": "Chores", "hidden": true },
+            { "type": "test", "section": "Tests", "hidden": true },
+            { "type": "style", "section": "Styles", "hidden": true }
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nAll notable changes to this project are documented here. From 0.1.0 onward this\nfile is maintained by [semantic-release](https://github.com/semantic-release/semantic-release)\nfrom [Conventional Commits](https://www.conventionalcommits.org/)."
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "package-lock.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
