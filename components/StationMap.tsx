@@ -200,7 +200,12 @@ export function StationMap({ station, state, selected, onPick, lang, flip }: Pro
     }));
 
   const statusOf = (id: string) => state?.units[id]?.status ?? "ok";
-  const statusWord = (id: string) => (statusOf(id) === "out" ? t.out : t.working);
+  const statusWord = (id: string) => {
+    const u = state?.units[id];
+    if (!u || u.status === "ok") return t.working;
+    if (u.status === "out") return t.out;
+    return u.last?.kind === "out" ? t.unsureOut : t.unsureOk;
+  };
 
   const isInteractive = (target: EventTarget | null) =>
     target instanceof Element && target.closest("button") != null;

@@ -12,6 +12,7 @@ export function InfoModal({ lang, onClose }: { lang: Lang; onClose: () => void }
       <h2 className={styles.title}>{t.whyTitle}</h2>
       <p className={styles.text}>{t.why1}</p>
       <p className={styles.text}>{t.why2}</p>
+      <p className={styles.text}>{t.why3}</p>
       <button type="button" className={styles.primary} onClick={onClose}>
         {t.gotIt}
       </button>

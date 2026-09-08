@@ -2,8 +2,15 @@ export type Lang = "en" | "nl";
 export type ThemePref = "light" | "dark" | "system";
 export type Theme = "light" | "dark";
 
-/** What a traveller reports, and the resting status of a unit. */
+/** What a traveller reports. */
 export type ReportKind = "out" | "ok";
+
+/**
+ * Traffic-light status of a unit. `unsure` is a single unconfirmed report
+ * sitting between the two settled states — one more report the same way
+ * settles it, one the other way cancels it. See {@link aggregate}.
+ */
+export type UnitStatus = "ok" | "unsure" | "out";
 
 export type UnitType = "escalator" | "lift";
 
@@ -68,14 +75,12 @@ export interface RawReport {
 
 /** Aggregated state of a single unit, sent to the client. */
 export interface UnitState {
-  status: ReportKind;
+  status: UnitStatus;
   last: { kind: ReportKind; at: string } | null;
-  /** consecutive reports agreeing with the current status */
+  /** consecutive most-recent reports of the same kind */
   streak: number;
   /** all reports ever filed for this unit */
   total: number;
-  /** the current status is "ok" but the unit was reported broken before that */
-  okAgain: boolean;
   /** the caller's own most recent report is the latest one and still undoable */
   canUndo: boolean;
 }

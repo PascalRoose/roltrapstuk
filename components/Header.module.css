@@ -53,6 +53,16 @@
   }
 }
 
+@keyframes dotPulseUnsure {
+  0% {
+    box-shadow: 0 0 0 0 rgba(232, 145, 46, 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px rgba(232, 145, 46, 0);
+  }
+}
+
 .kicker {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 11px;
@@ -71,7 +81,7 @@
 .summary {
   grid-column: 1 / -1;
   display: flex;
-  gap: 18px;
+  gap: 14px;
   font-size: 13px;
   color: var(--c-summary-on-dark);
 }
@@ -83,6 +93,7 @@
 }
 
 .dotOut,
+.dotUnsure,
 .dotOk {
   width: 10px;
   height: 10px;
@@ -96,6 +107,14 @@
 
 .dotOut[data-on="true"] {
   animation: dotPulseOut 2.4s ease-out infinite;
+}
+
+.dotUnsure {
+  background: var(--c-unsure);
+}
+
+.dotUnsure[data-on="true"] {
+  animation: dotPulseUnsure 2.4s ease-out infinite;
 }
 
 .dotOk {

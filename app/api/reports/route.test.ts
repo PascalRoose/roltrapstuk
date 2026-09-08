@@ -44,12 +44,13 @@ describe("POST /api/reports", () => {
     });
     expect(res.status).toBe(200);
     const state = (await res.json()) as StationState;
-    expect(state.units.E6.status).toBe("out");
+    // a single broken report only moves a working unit to "unsure"
+    expect(state.units.E6.status).toBe("unsure");
     expect(state.units.E6.total).toBe(1);
 
     // and it is actually persisted
     const reread = await readStationState("denbosch");
-    expect(reread?.units.E6.status).toBe("out");
+    expect(reread?.units.E6.status).toBe("unsure");
   });
 
   it.each([
@@ -80,7 +81,8 @@ describe("DELETE /api/reports", () => {
     expect(res.status).toBe(200);
     const state = (await res.json()) as StationState & { undone: boolean };
     expect(state.undone).toBe(true);
-    expect(state.units.E6.status).toBe("out");
+    // the "ok" is gone; the lone "out" leaves the unit "unsure"
+    expect(state.units.E6.status).toBe("unsure");
     expect(state.units.E6.total).toBe(1);
   });
 
