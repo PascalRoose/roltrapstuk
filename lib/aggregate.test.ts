@@ -24,7 +24,7 @@ describe("aggregate", () => {
         last: null,
         streak: 0,
         total: 0,
-        canUndo: false,
+        yours: null,
       });
     }
     expect(state.slug).toBe(station.slug);
@@ -124,43 +124,43 @@ describe("aggregate", () => {
     expect(summarise(state)).toEqual({ ok: station.units.length, unsure: 0, out: 0 });
   });
 
-  describe("canUndo", () => {
-    it("is true for the caller's own fresh latest report", () => {
+  describe("yours (the caller's own active report)", () => {
+    it("is the kind the caller last reported, while inside the undo window", () => {
       const state = aggregate(station, [report("E6", "out", 60_000, "me")], {
         now: T0,
         reporterId: "me",
       });
-      expect(state.units.E6.canUndo).toBe(true);
+      expect(state.units.E6.yours).toBe("out");
     });
 
-    it("is false for someone else's report", () => {
+    it("is null for someone else's report", () => {
       const state = aggregate(station, [report("E6", "out", 60_000, "someone")], {
         now: T0,
         reporterId: "me",
       });
-      expect(state.units.E6.canUndo).toBe(false);
+      expect(state.units.E6.yours).toBeNull();
     });
 
-    it("is false once the undo window has passed", () => {
+    it("is null once the undo window has passed, so the caller may report again", () => {
       const state = aggregate(station, [report("E6", "out", UNDO_WINDOW_MS + 1000, "me")], {
         now: T0,
         reporterId: "me",
       });
-      expect(state.units.E6.canUndo).toBe(false);
+      expect(state.units.E6.yours).toBeNull();
     });
 
-    it("is false when the caller's report is not the latest", () => {
+    it("stays set even when a later report from someone else supersedes it", () => {
       const state = aggregate(
         station,
         [report("E6", "out", 60_000, "me"), report("E6", "ok", 30_000, "other")],
         { now: T0, reporterId: "me" },
       );
-      expect(state.units.E6.canUndo).toBe(false);
+      expect(state.units.E6.yours).toBe("out");
     });
 
-    it("is false without a reporterId", () => {
+    it("is null without a reporterId", () => {
       const state = aggregate(station, [report("E6", "out", 1000, "me")], { now: T0 });
-      expect(state.units.E6.canUndo).toBe(false);
+      expect(state.units.E6.yours).toBeNull();
     });
   });
 });

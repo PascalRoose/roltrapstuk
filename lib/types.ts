@@ -81,8 +81,14 @@ export interface UnitState {
   streak: number;
   /** all reports ever filed for this unit */
   total: number;
-  /** the caller's own most recent report is the latest one and still undoable */
-  canUndo: boolean;
+  /**
+   * The caller's own active report for this unit: the kind they last reported,
+   * while it is still inside the undo window. `null` once the window has passed
+   * (they may report again) or if they never reported. One active report per
+   * device — the report buttons are hidden and only "undo" is offered while
+   * this is set. See {@link aggregate}.
+   */
+  yours: ReportKind | null;
 }
 
 export interface StationState {

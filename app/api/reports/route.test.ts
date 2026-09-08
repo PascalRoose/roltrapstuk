@@ -70,20 +70,35 @@ describe("POST /api/reports", () => {
     );
     expect(res.status).toBe(400);
   });
+
+  it("rejects a second report from the same device on the same unit with 409", async () => {
+    await post({ station: "denbosch", unitId: "E6", kind: "out", reporterId: REPORTER });
+    const res = await post({ station: "denbosch", unitId: "E6", kind: "ok", reporterId: REPORTER });
+    expect(res.status).toBe(409);
+
+    // the second report was not recorded
+    const reread = await readStationState("denbosch");
+    expect(reread?.units.E6.total).toBe(1);
+  });
+
+  it("lets a device report again once it has undone its report", async () => {
+    await post({ station: "denbosch", unitId: "E6", kind: "out", reporterId: REPORTER });
+    await del({ station: "denbosch", unitId: "E6", reporterId: REPORTER });
+    const res = await post({ station: "denbosch", unitId: "E6", kind: "ok", reporterId: REPORTER });
+    expect(res.status).toBe(200);
+  });
 });
 
 describe("DELETE /api/reports", () => {
-  it("undoes the caller's most recent report", async () => {
+  it("undoes the caller's own report", async () => {
     await post({ station: "denbosch", unitId: "E6", kind: "out", reporterId: REPORTER });
-    await post({ station: "denbosch", unitId: "E6", kind: "ok", reporterId: REPORTER });
 
     const res = await del({ station: "denbosch", unitId: "E6", reporterId: REPORTER });
     expect(res.status).toBe(200);
     const state = (await res.json()) as StationState & { undone: boolean };
     expect(state.undone).toBe(true);
-    // the "ok" is gone; the lone "out" leaves the unit "unsure"
-    expect(state.units.E6.status).toBe("unsure");
-    expect(state.units.E6.total).toBe(1);
+    expect(state.units.E6.status).toBe("ok");
+    expect(state.units.E6.total).toBe(0);
   });
 
   it("reports undone:false when there is nothing to undo", async () => {

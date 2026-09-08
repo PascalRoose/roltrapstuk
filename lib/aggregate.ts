@@ -1,4 +1,11 @@
-import type { RawReport, StationDef, StationState, UnitState, UnitStatus } from "@/lib/types";
+import type {
+  RawReport,
+  ReportKind,
+  StationDef,
+  StationState,
+  UnitState,
+  UnitStatus,
+} from "@/lib/types";
 
 export const UNDO_WINDOW_MS = 15 * 60 * 1000;
 
@@ -7,7 +14,7 @@ const EMPTY: UnitState = {
   last: null,
   streak: 0,
   total: 0,
-  canUndo: false,
+  yours: null,
 };
 
 /**
@@ -59,17 +66,24 @@ export function aggregate(
     let streak = 0;
     for (let i = list.length - 1; i >= 0 && list[i].kind === last.kind; i--) streak++;
 
-    const canUndo =
-      !!opts.reporterId &&
-      last.reporterId === opts.reporterId &&
-      now - new Date(last.at).getTime() < UNDO_WINDOW_MS;
+    // The caller's own most recent report for this unit — even if a later
+    // report from someone else has since superseded it. It only counts as
+    // "yours" (undoable, and blocking a re-report) while inside the window.
+    let yours: ReportKind | null = null;
+    if (opts.reporterId) {
+      for (let i = list.length - 1; i >= 0; i--) {
+        if (list[i].reporterId !== opts.reporterId) continue;
+        if (now - new Date(list[i].at).getTime() < UNDO_WINDOW_MS) yours = list[i].kind;
+        break;
+      }
+    }
 
     units[unit.id] = {
       status: foldStatus(list),
       last: { kind: last.kind, at: last.at },
       streak,
       total: list.length,
-      canUndo,
+      yours,
     };
   }
 

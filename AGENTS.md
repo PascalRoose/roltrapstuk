@@ -15,5 +15,6 @@ Quick reference:
   Prettier owns formatting; a pre-commit hook runs `lint-staged`.
 - Data model: an append-only report log folded into a three-state traffic light
   per unit (`ok` / `unsure` / `out`) — two same-way reports to settle a unit
-  broken or working, one opposite report cancels an `unsure`. Core logic is in
-  `lib/` (`aggregate.ts`, `store.ts`, `stationState.ts`).
+  broken or working, one opposite report cancels an `unsure`. One active report
+  per device per unit, undoable for 15 minutes then locked as history. Core
+  logic is in `lib/` (`aggregate.ts`, `store.ts`, `stationState.ts`).

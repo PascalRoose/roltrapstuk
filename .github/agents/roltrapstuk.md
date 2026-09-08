@@ -40,7 +40,7 @@ on memory. In particular: route `params` and `searchParams` are `Promise`s;
 | Path | Responsibility |
 | --- | --- |
 | `lib/stations/` | Per-station definitions: unit list, map geometry (against a 402×620 canvas), EN/NL copy. Add a station here + register in `index.ts` → it gets a `/<slug>` route. See the [`add-station`](../skills/add-station.md) playbook. |
-| `lib/aggregate.ts` | Folds the append-only report log into per-unit state. Status is a three-state traffic light (`ok` / `unsure` / `out`): a confidence counter starts at working and each report moves it one clamped step, so it takes two same-way reports to settle a unit broken or working and one opposite report cancels an `unsure`. Pure, well-tested. |
+| `lib/aggregate.ts` | Folds the append-only report log into per-unit state. Status is a three-state traffic light (`ok` / `unsure` / `out`): a confidence counter starts at working and each report moves it one clamped step, so it takes two same-way reports to settle a unit broken or working and one opposite report cancels an `unsure`. Also derives `yours` — the device's own active report for a unit, undoable for 15 min then dropped so it can report again. Pure, well-tested. |
 | `lib/store.ts` | Data access. Postgres via `@neondatabase/serverless` when `DATABASE_URL` is set, else an in-memory store (dev only; refused in production). |
 | `lib/stationState.ts` | `store` + `aggregate` → the shape the client renders. |
 | `app/api/` | `GET /api/stations/[station]`, `POST` / `DELETE /api/reports`. |

@@ -46,6 +46,13 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: parsed.error }, { status: 400 });
   }
 
+  // One active report per device per unit. A stale report (past the undo
+  // window) no longer counts as "yours", so re-reporting is allowed again.
+  const before = await readStationState(parsed.station, parsed.reporterId);
+  if (before?.units[parsed.unitId]?.yours) {
+    return Response.json({ error: "already reported" }, { status: 409 });
+  }
+
   await getStore().add(parsed);
   const state = await readStationState(parsed.station, parsed.reporterId);
   return Response.json(state, { headers: { "cache-control": "no-store" } });

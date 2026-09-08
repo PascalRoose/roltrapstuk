@@ -36,16 +36,17 @@ export function DetailPanel({
   const last = unitState?.last ?? null;
   const streak = unitState?.streak ?? 0;
   const total = unitState?.total ?? 0;
-  const canUndo = unitState?.canUndo ?? false;
+  const yours = unitState?.yours ?? null;
 
   let statusWord: string;
   if (status === "out") statusWord = t.out;
   else if (status === "ok") statusWord = t.working;
   else statusWord = last?.kind === "out" ? t.unsureOut : t.unsureOk;
 
+  const mine = justReported ?? yours;
   let lastText: string;
   if (!last) lastText = t.noReports;
-  else if (justReported) lastText = justReported === "out" ? t.youOut : t.youOk;
+  else if (mine) lastText = mine === "out" ? t.youOut : t.youOk;
   else lastText = last.kind === "out" ? t.lastOut : t.lastOk;
 
   const lastTime = last ? relativeTime(last.at, lang, now) : "—";
@@ -82,29 +83,29 @@ export function DetailPanel({
         </div>
       )}
 
-      <div className={styles.actions}>
-        <button
-          type="button"
-          className={`${styles.btn} ${styles.btnOut}`}
-          onClick={() => onReport("out")}
-          disabled={busy}
-        >
-          {t.reportOut}
-        </button>
-        <button
-          type="button"
-          className={`${styles.btn} ${styles.btnOk}`}
-          onClick={() => onReport("ok")}
-          disabled={busy}
-        >
-          {t.reportOk}
-        </button>
-      </div>
-
-      {canUndo && (
+      {yours ? (
         <button type="button" className={styles.undo} onClick={onUndo} disabled={busy}>
           {t.undo}
         </button>
+      ) : (
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={`${styles.btn} ${styles.btnOut}`}
+            onClick={() => onReport("out")}
+            disabled={busy}
+          >
+            {t.reportOut}
+          </button>
+          <button
+            type="button"
+            className={`${styles.btn} ${styles.btnOk}`}
+            onClick={() => onReport("ok")}
+            disabled={busy}
+          >
+            {t.reportOk}
+          </button>
+        </div>
       )}
     </div>
   );
