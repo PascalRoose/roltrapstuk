@@ -22,7 +22,21 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          persist-credentials: false
+          # Check out over SSH with a deploy key so the version-bump commit that
+          # @semantic-release/git pushes back to main authenticates as the key
+          # and can bypass branch protection (a GITHUB_TOKEN push can't). The
+          # deploy key's public half is added under Settings → Deploy keys with
+          # "Allow write access"; its private half is the SEMANTIC_RELEASE_DEPLOY_KEY
+          # secret. persist-credentials keeps checkout's core.sshCommand in the
+          # repo config for that later push. Deploy-key pushes don't retrigger
+          # workflows, and the release commit also carries [skip ci] as a guard.
+          persist-credentials: true
+          ssh-key: ${{ secrets.SEMANTIC_RELEASE_DEPLOY_KEY }}
+
+      # semantic-release reads the repo URL from package.json (https form) and
+      # tries that first. Rewrite github https -> ssh so the probe push succeeds
+      # over the deploy key and semantic-release doesn't fall back to the token.
+      - run: git config --global url."git@github.com:".insteadOf "https://github.com/"
 
       - uses: actions/setup-node@v7
         with:
@@ -36,8 +50,9 @@ jobs:
       # CHANGELOG.md, commits both back to main, tags, and publishes a GitHub
       # Release. No-ops when the commits don't warrant a release.
       #
-      # If main is a protected branch, GITHUB_TOKEN must be allowed to push to it
-      # (or set a GH_TOKEN secret with a PAT / GitHub App token that can).
+      # The push to main goes over SSH via the deploy key configured above; the
+      # GITHUB_TOKEN below is only for the GitHub API (tags, Releases, issue/PR
+      # comments) used by @semantic-release/github.
       - run: npx --no-install semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
