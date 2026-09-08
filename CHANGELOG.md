@@ -4,6 +4,20 @@ All notable changes to this project are documented here. From 0.1.0 onward this
 file is maintained by [semantic-release](https://github.com/semantic-release/semantic-release)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [0.2.0](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.2...roltrapstuk-v0.2.0) (2026-09-08)
+
+### Features
+
+* add orange traffic light ([#19](https://github.com/PascalRoose/roltrapstuk/issues/19)) ([963173f](https://github.com/PascalRoose/roltrapstuk/commit/963173f74b7ee78c3c28135feba4cddf6c9e7a23))
+* add subtle ambient motion to the station view ([#17](https://github.com/PascalRoose/roltrapstuk/issues/17)) ([cb1bc7c](https://github.com/PascalRoose/roltrapstuk/commit/cb1bc7ce2ac0eb108049ddff248cac081bf2e39b))
+* open infoscreen upon first visit ([#16](https://github.com/PascalRoose/roltrapstuk/issues/16)) ([7261cfd](https://github.com/PascalRoose/roltrapstuk/commit/7261cfd0d297a896c2ced82e9ea2c805612a8fd0))
+
+### Bug Fixes
+
+* changed about text and removed the words 'again' ([#14](https://github.com/PascalRoose/roltrapstuk/issues/14)) ([f4d5385](https://github.com/PascalRoose/roltrapstuk/commit/f4d53859d04c66270694948d8e3781df7147a949))
+* pin conventional-changelog preset to writer 8 compatible major ([d8a88b8](https://github.com/PascalRoose/roltrapstuk/commit/d8a88b8e952a1bf8bfe4d8842605c1330f9e3d3f))
+* split spoor 7 into a and b ([#18](https://github.com/PascalRoose/roltrapstuk/issues/18)) ([ce1e020](https://github.com/PascalRoose/roltrapstuk/commit/ce1e0208913be8a50d272539e74d17e320709b57))
+
 ## [0.1.2](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.1.1...roltrapstuk-v0.1.2) (2026-09-03)
 
 

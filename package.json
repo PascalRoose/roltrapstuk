@@ -1,6 +1,6 @@
 {
   "name": "roltrapstuk",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "description": "Crowdsourced escalator and lift status for 's-Hertogenbosch train station.",
   "license": "MIT",
