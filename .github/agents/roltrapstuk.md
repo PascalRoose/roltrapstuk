@@ -56,7 +56,9 @@ on memory. In particular: route `params` and `searchParams` are `Promise`s;
   which cuts a release on every push to `main` (no release PR; see
   `.releaserc.json` and `.github/workflows/release.yml`). PRs merge with a merge
   commit, not squash, so the branch commits are what get released. `fix:` →
-  patch, `feat:` → minor, breaking change → major.
+  patch, `feat:` → minor, breaking change → major (`!` / `BREAKING CHANGE:`
+  footer, or the `breaking:` type — an allowed extra type mapped to `major` in
+  `.releaserc.json`).
 - **Prettier owns formatting** (`.prettierrc.json`); ESLint is `eslint-config-next`
   + `eslint-config-prettier`. A pre-commit hook runs `lint-staged`.
 - **Tests**: pure logic in `lib/*.test.ts`; the route handlers are tested against
