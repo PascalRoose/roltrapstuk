@@ -120,6 +120,12 @@ Connect the GitHub repo in the Vercel dashboard — Vercel's Git integration bui
 and deploys every push and PR, no deploy workflow needed. Add a Neon database from
 the Storage tab (it sets `DATABASE_URL` automatically). No other configuration.
 
+Deleting a branch on GitHub triggers
+[`.github/workflows/cleanup-preview.yml`](.github/workflows/cleanup-preview.yml),
+which removes that branch's stale Vercel preview deployments. It needs three
+repository secrets — `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, and `VERCEL_TEAM_ID`
+(omit the last for a personal account); it no-ops when they are unset.
+
 ## Adding a station
 
 Add a `StationDef` under `lib/stations/`, register it in

@@ -1,0 +1,94 @@
+name: Cleanup preview deployments
+
+# Vercel's Git integration builds a preview deployment for every push to a
+# branch, but it never removes them when the branch goes away. This workflow
+# does: when a branch is deleted, it deletes every Vercel deployment whose git
+# ref was that branch.
+#
+# Needs three repository secrets:
+#   VERCEL_TOKEN       - a Vercel access token (Account Settings → Tokens)
+#   VERCEL_PROJECT_ID  - the project's id (Project Settings → General)
+#   VERCEL_TEAM_ID     - the team/owner id (Team Settings → General); omit for a
+#                        personal account
+on:
+  delete:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cleanup-preview-${{ github.event.ref }}
+  cancel-in-progress: false
+
+jobs:
+  remove:
+    # `delete` also fires for tags; only act on branch deletions, and never on main.
+    if: github.event.ref_type == 'branch' && github.event.ref != 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete deployments for ${{ github.event.ref }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          BRANCH: ${{ github.event.ref }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${VERCEL_TOKEN:-}" ] || [ -z "${VERCEL_PROJECT_ID:-}" ]; then
+            echo "VERCEL_TOKEN / VERCEL_PROJECT_ID not set — skipping." >&2
+            exit 0
+          fi
+
+          api="https://api.vercel.com"
+          team_qs=""
+          if [ -n "${VERCEL_TEAM_ID:-}" ]; then
+            team_qs="&teamId=${VERCEL_TEAM_ID}"
+          fi
+          auth="Authorization: Bearer ${VERCEL_TOKEN}"
+
+          # Page through the project's deployments, collecting the ids whose git
+          # branch matches. v6 has no branch filter, so filter client-side on
+          # meta.githubCommitRef.
+          ids=""
+          until=""
+          while :; do
+            url="${api}/v6/deployments?projectId=${VERCEL_PROJECT_ID}&limit=100${team_qs}"
+            if [ -n "$until" ]; then
+              url="${url}&until=${until}"
+            fi
+            page="$(curl -fsS -H "$auth" "$url")"
+
+            match="$(printf '%s' "$page" | jq -r \
+              --arg b "$BRANCH" \
+              '.deployments[] | select(.meta.githubCommitRef == $b) | .uid')"
+            if [ -n "$match" ]; then
+              ids="${ids}${match}"$'\n'
+            fi
+
+            until="$(printf '%s' "$page" | jq -r '.pagination.next // empty')"
+            if [ -z "$until" ]; then
+              break
+            fi
+          done
+
+          ids="$(printf '%s' "$ids" | sed '/^$/d' | sort -u)"
+          if [ -z "$ids" ]; then
+            echo "No deployments found for branch '${BRANCH}'."
+            exit 0
+          fi
+
+          echo "Deleting $(printf '%s\n' "$ids" | wc -l) deployment(s) for '${BRANCH}':"
+          fail=0
+          while IFS= read -r id; do
+            [ -n "$id" ] || continue
+            code="$(curl -sS -o /dev/null -w '%{http_code}' -X DELETE \
+              -H "$auth" "${api}/v13/deployments/${id}?${team_qs#&}")"
+            if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+              echo "  deleted ${id}"
+            else
+              echo "  FAILED ${id} (HTTP ${code})" >&2
+              fail=1
+            fi
+          done <<< "$ids"
+          exit $fail
