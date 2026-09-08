@@ -72,6 +72,16 @@
   }
 }
 
+@keyframes dotPulseUnsure {
+  0% {
+    box-shadow: 0 0 0 0 rgba(232, 145, 46, 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 9px rgba(232, 145, 46, 0);
+  }
+}
+
 .dot {
   width: 16px;
   height: 16px;
@@ -88,6 +98,11 @@
 .dot[data-status="ok"] {
   background: var(--c-ok);
   animation: dotPulseOk 2.4s ease-out infinite;
+}
+
+.dot[data-status="unsure"] {
+  background: var(--c-unsure);
+  animation: dotPulseUnsure 2.4s ease-out infinite;
 }
 
 .headText {
@@ -167,37 +182,55 @@
   color: var(--c-confirm-text);
 }
 
-.primary {
-  border: 0;
-  background: var(--c-primary-bg);
-  color: var(--c-primary-text);
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--c-card-border);
+  background: var(--c-surface);
+  color: var(--c-text);
   border-radius: 12px;
-  padding: 16px;
+  padding: 15px 12px;
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition:
     transform 0.15s ease,
     filter 0.15s ease,
+    background-color 0.15s ease,
     opacity 0.15s ease;
 }
 
-.primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  filter: brightness(1.08);
+.btnOut {
+  border-color: var(--c-out);
+  color: var(--c-out);
 }
 
-.primary:active:not(:disabled) {
+.btnOk {
+  border-color: var(--c-ok);
+  color: var(--c-ok);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--c-card);
+}
+
+.btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.primary:disabled {
+.btn:disabled {
   opacity: 0.6;
   cursor: progress;
 }
 
-.primary:focus-visible,
+.btn:focus-visible,
 .undo:focus-visible {
   outline: 2px solid var(--c-primary-bg);
   outline-offset: 2px;

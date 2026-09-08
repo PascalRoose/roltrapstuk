@@ -9,7 +9,7 @@ const REPO_URL = "https://github.com/PascalRoose/roltrapstuk";
 interface Props {
   station: StationDef;
   lang: Lang;
-  summary: { ok: number; out: number } | null;
+  summary: { ok: number; unsure: number; out: number } | null;
   onInfo: () => void;
   onSettings: () => void;
 }
@@ -28,6 +28,10 @@ export function Header({ station, lang, summary, onInfo, onSettings }: Props) {
         <span className={styles.count}>
           <i className={styles.dotOut} data-on={!!summary && summary.out > 0} aria-hidden />
           {summary ? summary.out : "–"} {t.outShort}
+        </span>
+        <span className={styles.count}>
+          <i className={styles.dotUnsure} data-on={!!summary && summary.unsure > 0} aria-hidden />
+          {summary ? summary.unsure : "–"} {t.unsureShort}
         </span>
         <span className={styles.count}>
           <i className={styles.dotOk} data-on={!!summary && summary.ok > 0} aria-hidden />

@@ -87,18 +87,27 @@ DATABASE_URL=... npm run db:seed
 ## Data model
 
 `reports` is an append-only log — one row per traveller report
-(`station`, `unit_id`, `kind` ∈ `out | ok`, `reporter_id`, `created_at`). A
-unit's current status is simply its most recent report; a unit with no reports
-is assumed to be working. `reporter_id` is a random per-device id kept in
-`localStorage`, used only to attribute and undo a report.
+(`station`, `unit_id`, `kind` ∈ `out | ok`, `reporter_id`, `created_at`). The
+log folds into a three-state traffic light per unit: a unit starts confidently
+**working** (green), each report nudges a confidence counter one step (clamped
+to broken ↔ working), so a single "broken" report only makes a working unit
+**unsure** (orange) and it takes a second one to settle it to **broken** (red);
+reporting a broken unit working walks it back the same way. A unit with no
+reports is assumed to be working.
+
+`reporter_id` is a random per-device id kept in `localStorage`, used to
+attribute and undo a report. A device may hold only one active report per unit:
+while it is inside the 15-minute undo window the report buttons give way to
+"undo"; once the window passes the report stays in the log as history and the
+device is free to report again.
 
 ## API
 
 | Method   | Route                        | Purpose                                    |
 | -------- | ---------------------------- | ------------------------------------------ |
-| `GET`    | `/api/stations/[station]`    | Aggregated per-unit status. `?r=` = reporter id (drives `canUndo`). |
-| `POST`   | `/api/reports`               | File a report. Body: `{ station, unitId, kind, reporterId }`. |
-| `DELETE` | `/api/reports`               | Undo your latest report for a unit (within 15 min). Body: `{ station, unitId, reporterId }`. |
+| `GET`    | `/api/stations/[station]`    | Aggregated per-unit status. `?r=` = reporter id (drives `yours`). |
+| `POST`   | `/api/reports`               | File a report. Body: `{ station, unitId, kind, reporterId }`. `409` if the device already has an active report for the unit. |
+| `DELETE` | `/api/reports`               | Undo your report for a unit (within 15 min). Body: `{ station, unitId, reporterId }`. |
 
 Both write routes return the fresh station state.
 

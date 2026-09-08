@@ -297,6 +297,10 @@
   animation: pulseOut 2.4s ease-out infinite;
 }
 
+.chip[data-status="unsure"]::after {
+  animation: pulseUnsure 2.4s ease-out infinite;
+}
+
 .chip[data-selected="true"]::after,
 .hit:focus-visible .chip::after {
   animation: none;
@@ -324,6 +328,16 @@
   }
 }
 
+@keyframes pulseUnsure {
+  0% {
+    box-shadow: 0 0 0 0 rgba(232, 145, 46, 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 5px rgba(232, 145, 46, 0);
+  }
+}
+
 .chip[data-type="lift"] {
   flex-direction: column;
   border-radius: 8px;
@@ -337,6 +351,11 @@
 .chip[data-status="out"] {
   background: var(--m-out);
   color: var(--m-chip-text-out);
+}
+
+.chip[data-status="unsure"] {
+  background: var(--m-unsure);
+  color: var(--m-chip-text-unsure);
 }
 
 .chip[data-selected="true"] {
