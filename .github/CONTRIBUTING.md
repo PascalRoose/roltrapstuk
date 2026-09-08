@@ -70,7 +70,8 @@ Every push to `main` runs the release workflow directly — there is no release
 PR. It bumps the version, updates `CHANGELOG.md`, commits both back to `main`,
 tags, and publishes a GitHub Release; a push with no releasable commits is a
 no-op. `fix:` bumps the patch version, `feat:` the minor, and a breaking change
-(`!` or a `BREAKING CHANGE:` footer) the major.
+the major — either the standard `!` / `BREAKING CHANGE:` footer on any type, or a
+`breaking:` type as shorthand.
 
 ## Adding a station
 

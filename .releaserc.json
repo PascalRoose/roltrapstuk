@@ -6,7 +6,8 @@
     [
       "@semantic-release/commit-analyzer",
       {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "releaseRules": [{ "type": "breaking", "release": "major" }]
       }
     ],
     [
@@ -15,6 +16,7 @@
         "preset": "conventionalcommits",
         "presetConfig": {
           "types": [
+            { "type": "breaking", "section": "⚠ BREAKING CHANGES" },
             { "type": "feat", "section": "Features" },
             { "type": "fix", "section": "Bug Fixes" },
             { "type": "perf", "section": "Performance" },
