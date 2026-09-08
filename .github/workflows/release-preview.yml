@@ -54,7 +54,8 @@ jobs:
             --branches "$HEAD_REF" \
             --tag-format 'roltrapstuk-v${version}' \
             --plugins '@semantic-release/commit-analyzer,@semantic-release/release-notes-generator' \
-            2>&1 | tee release.log || true
+            > release.log 2>&1 || true
+          cat release.log
 
           version="$(grep -oE 'The next release version is [0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' release.log | grep -oE '[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?' | head -n1 || true)"
 
@@ -63,7 +64,7 @@ jobs:
             echo
             if [ -n "$version" ]; then
               echo "Merging this PR will publish **roltrapstuk-v${version}**."
-              notes="$(awk '/Release note for version/{f=1;next} /^\[[0-9]+:[0-9]+/{f=0} f' release.log | sed 's/^ \{1,4\}//' || true)"
+              notes="$(awk '/Release note for version/{f=1;next} /^\[[0-9]+:[0-9]+/||/^npm (notice|warn|error)/{f=0} f' release.log | sed 's/^ \{1,4\}//' || true)"
               if [ -n "$notes" ]; then
                 echo
                 echo "<details><summary>Release notes</summary>"
