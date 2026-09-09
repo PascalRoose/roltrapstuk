@@ -3,6 +3,8 @@
 How the pieces fit together. For the per-file responsibility table see
 [`.github/agents/roltrapstuk.md`](../.github/agents/roltrapstuk.md); for adding a
 station see [`.github/skills/add-station.md`](../.github/skills/add-station.md).
+The `/api` endpoints have their own reference in [api.md](api.md); the reasoning
+behind the model, the driver and the map lives in [decisions/](decisions/).
 
 roltrapstuk is a Next.js 16 App Router app. The data model is an **append-only
 report log** folded into a **three-state traffic light** per unit. There are no

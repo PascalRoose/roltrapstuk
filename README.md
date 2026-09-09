@@ -58,8 +58,8 @@ Node 22 and 24 for every push and PR (`.github/workflows/ci.yml`). Also wired up
   the version the merge will publish.
 
 Tests cover the report-log aggregation (`lib/aggregate.ts`), relative-time
-formatting, the i18n dictionaries, and the `/api/reports` route handlers
-(validation + undo, against the in-memory store).
+formatting, the i18n dictionaries, and the report route handlers (validation +
+undo, against the in-memory store).
 
 ## Releases
 
@@ -104,15 +104,14 @@ while it is inside the 15-minute undo window the report buttons give way to
 "undo"; once the window passes the report stays in the log as history and the
 device is free to report again.
 
-## API
+## Docs
 
-| Method   | Route                        | Purpose                                    |
-| -------- | ---------------------------- | ------------------------------------------ |
-| `GET`    | `/api/stations/[station]`    | Aggregated per-unit status. `?r=` = reporter id (drives `yours`). |
-| `POST`   | `/api/reports`               | File a report. Body: `{ station, unitId, kind, reporterId }`. `409` if the device already has an active report for the unit. |
-| `DELETE` | `/api/reports`               | Undo your report for a unit (within 15 min). Body: `{ station, unitId, reporterId }`. |
-
-Both write routes return the fresh station state.
+- [`docs/architecture.md`](docs/architecture.md) — component and data-model
+  diagrams, the read and write paths.
+- [`docs/api.md`](docs/api.md) — the three `/api` endpoints.
+- [`docs/decisions/`](docs/decisions/) — architecture decision records: why the
+  model, the driver, the release flow and the map are the way they are.
+- [`docs/maintaining.md`](docs/maintaining.md) — release and deploy tasks.
 
 ## Deploy
 
