@@ -12,6 +12,10 @@ import configConventional from "@commitlint/config-conventional";
  * it its own changelog section; without this rule `commitlint` would reject the
  * commit before it could get there.
  *
+ * Dependabot's commits have a well-formed `chore(deps*):` header but a body of
+ * pasted release notes that blows past `body-max-line-length`. They never
+ * trigger a release, so they're skipped rather than reformatted.
+ *
  * @type {import("@commitlint/types").UserConfig}
  */
 const [level, applicable, types] = configConventional.rules["type-enum"];
@@ -21,6 +25,7 @@ const config = {
   rules: {
     "type-enum": [level, applicable, ["breaking", ...types]],
   },
+  ignores: [(message) => message.includes("Signed-off-by: dependabot[bot]")],
 };
 
 export default config;

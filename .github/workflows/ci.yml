@@ -54,3 +54,19 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+
+  # Single stable check for the `main` branch ruleset to require. The matrix job
+  # names above carry the Node version and would need re-listing in the ruleset
+  # on every Node bump; this one does not.
+  ci:
+    name: CI
+    if: always()
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify the matrix succeeded
+        run: |
+          if [ "${{ needs.verify.result }}" != "success" ]; then
+            echo "verify matrix result: ${{ needs.verify.result }}"
+            exit 1
+          fi
