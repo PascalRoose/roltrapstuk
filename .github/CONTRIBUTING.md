@@ -11,7 +11,7 @@ Thanks for helping keep the escalators honest.
 
 ## Development
 
-Requires Node ≥ 20.9 (`.nvmrc` pins 22).
+Requires Node ≥ 22.12 (`.nvmrc` pins 22).
 
 ```bash
 npm install
@@ -45,7 +45,7 @@ npm test
 npm run build
 ```
 
-CI runs all of these on Node 20 and 22.
+CI runs all of these on Node 22 and 24.
 
 ## Commits
 

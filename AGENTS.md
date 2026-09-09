@@ -10,7 +10,7 @@ Quick reference:
 - **Next.js 16, App Router.** Conventions differ from older versions — consult
   `node_modules/next/dist/docs/` for framework APIs rather than memory.
 - Run `npm run format && npm run lint && npm run typecheck && npm test && npm run build`
-  before treating a change as done. CI runs the same on Node 20 and 22.
+  before treating a change as done. CI runs the same on Node 22 and 24.
 - **Conventional Commits** (every commit is `commitlint`-checked and drives
   `semantic-release`, which releases on every push to `main`). Prettier owns
   formatting; a pre-commit hook runs `lint-staged`, a commit-msg hook runs
