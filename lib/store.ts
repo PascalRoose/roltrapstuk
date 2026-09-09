@@ -145,7 +145,3 @@ export function getStore(): Store {
   }
   return store;
 }
-
-export function hasDatabase(): boolean {
-  return CONNECTION.length > 0;
-}

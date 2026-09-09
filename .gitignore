@@ -44,3 +44,6 @@ next-env.d.ts
 # editor / assistant local settings
 .claude/
 .cursor/
+
+# graphify knowledge graph (generated, regenerable via /graphify)
+/graphify-out/
