@@ -4,6 +4,27 @@ All notable changes to this project are documented here. From 0.1.0 onward this
 file is maintained by [semantic-release](https://github.com/semantic-release/semantic-release)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [1.0.1](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v1.0.0...roltrapstuk-v1.0.1) (2026-09-09)
+
+### Bug Fixes
+
+* **devcontainer:** drop Postgres service the driver can't reach ([819e490](https://github.com/PascalRoose/roltrapstuk/commit/819e490f02c7ae6069cba133aec3632d15207399))
+* drop Node 20 support and upgrade dev dependencies ([f73f282](https://github.com/PascalRoose/roltrapstuk/commit/f73f2823e63242759711774bf9595546738096a4))
+* pin conventionalcommits preset to v8 for semantic-release ([20e72dc](https://github.com/PascalRoose/roltrapstuk/commit/20e72dcb2434d20fcfc4f3ee9f224a7206e5f908))
+
+### Documentation
+
+* add API reference, swap README API table for a docs index ([93a6ea8](https://github.com/PascalRoose/roltrapstuk/commit/93a6ea89c43ac86aca768c91d3872e945c5a774a))
+* add architecture decision records ([61f519d](https://github.com/PascalRoose/roltrapstuk/commit/61f519dc40304ff9891f9e8027d0392eb44d5a5a))
+* add architecture.md with component and data-model diagrams ([10a6c45](https://github.com/PascalRoose/roltrapstuk/commit/10a6c45c85f0c70c61bf33d35a3679c518c08e56))
+* add write-adr, add-endpoint and add-copy skills ([b55207f](https://github.com/PascalRoose/roltrapstuk/commit/b55207f77acadaa33cf05f77263690554bd6ee10))
+* correct maintaining.md for the semantic-release flow ([3b0a418](https://github.com/PascalRoose/roltrapstuk/commit/3b0a4185793ea618df52583010949c6ebdfbd02b))
+
+### Refactoring
+
+* drop unused hasDatabase() helper ([b59f55f](https://github.com/PascalRoose/roltrapstuk/commit/b59f55fe94fbe5de4e8af088432ff858f5e7ec6d))
+* trim the info modal to two paragraphs ([a9e4ef0](https://github.com/PascalRoose/roltrapstuk/commit/a9e4ef065cc1ece816eb2876c5e88beacc1ccce8))
+
 ## [1.0.0](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v0.2.0...roltrapstuk-v1.0.0) (2026-09-08)
 
 ### ⚠ BREAKING CHANGES
