@@ -7,25 +7,10 @@ services:
     volumes:
       - ..:/workspace:cached
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/roltrapstuk
       NEXT_TELEMETRY_DISABLED: "1"
-    depends_on:
-      - db
 
-  db:
-    image: postgres:17-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: roltrapstuk
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d roltrapstuk"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-volumes:
-  postgres-data:
+# No database service: the app talks to Postgres through
+# @neondatabase/serverless, which uses HTTP/WebSockets to a Neon endpoint rather
+# than TCP, so it can't reach a plain postgres:// container without a proxy.
+# The container uses the in-memory store; for real Postgres put a Neon
+# connection string in .env.local, same as a local checkout.

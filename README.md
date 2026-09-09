@@ -35,9 +35,9 @@ npm run dev
 Open <http://localhost:3000>. The root redirects to `/denbosch`.
 
 Prefer a container? Open the repo in the [dev container](.devcontainer/) (VS Code
-or GitHub Codespaces) — Node 22 and a Postgres service are already wired up, and
-`npm install` installs the Git hooks (pre-commit `lint-staged`, pre-push
-`typecheck` + tests).
+or GitHub Codespaces) — Node 22 is already set up, and `npm install` installs the
+Git hooks (pre-commit `lint-staged`, pre-push `typecheck` + tests). It uses the
+in-memory store; point it at Neon via `.env.local` for real Postgres.
 
 ## Checks
 
@@ -156,7 +156,7 @@ components/                 StationView, StationMap, Header, DetailPanel
 hooks/                      useSettings (localStorage + OS theme), useReporterId
 db/ scripts/                schema + seed script
 test/                       vitest helpers (unit tests are colocated as *.test.ts)
-.devcontainer/              VS Code / Codespaces container (Node 22 + Postgres)
+.devcontainer/              VS Code / Codespaces container (Node 22)
 .github/                    workflows, community-health files, agents/, skills/
 ```
 

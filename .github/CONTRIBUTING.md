@@ -25,15 +25,16 @@ and the tests. Bypass with `--no-verify` when you need to.
 ### Dev container
 
 There's a [dev container](../.devcontainer/) (VS Code / GitHub Codespaces) with
-Node 22 and a Postgres service already wired up — open the repo in the container
-and `DATABASE_URL` points at it, so `npm run dev` and `npm run db:seed` work
-against real Postgres with no setup.
+Node 22 set up and the Git hooks installed. It uses the in-memory store like any
+other local checkout — see below.
 
 ### Database
 
 No database is needed locally — an in-memory store is used when `DATABASE_URL`
 is unset (reports reset on restart). To work against real Postgres, put a Neon
-connection string in `.env.local` (or use the dev container).
+connection string in `.env.local`. The driver (`@neondatabase/serverless`) speaks
+HTTP/WebSockets to a Neon endpoint, not TCP, so a plain local Postgres won't work
+without a proxy.
 
 Before opening a PR:
 
