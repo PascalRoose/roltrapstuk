@@ -26,7 +26,7 @@ npm run build        # next build
 ```
 
 Before proposing a change as done, run `format`, `lint`, `typecheck`, `test`, and
-`build`. CI runs all of them on Node 20 and 22.
+`build`. CI runs all of them on Node 22 and 24.
 
 ## This is Next.js 16 (App Router)
 

@@ -49,7 +49,7 @@ npm run coverage    # vitest + v8 coverage (thresholds enforced)
 ```
 
 CI runs `npm run format:check`, `lint`, `typecheck`, `coverage` and `build` on
-Node 20 and 22 for every push and PR (`.github/workflows/ci.yml`). Also wired up:
+Node 22 and 24 for every push and PR (`.github/workflows/ci.yml`). Also wired up:
 
 - **CodeQL** SAST — `security-and-quality` queries, weekly + on every change.
 - **Dependency review** on PRs and **Dependabot** (npm + GitHub Actions, weekly).

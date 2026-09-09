@@ -1,11 +1,79 @@
 version: 2
+
 updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
+
+    # Node-version safety: the "engines.node" field in package.json (>=22.12)
+    # is the primary guard — Dependabot will not propose an npm release whose
+    # own "engines.node" rules out our supported range (Node 22 and 24).
+    # Packages that ship no "engines" field need the explicit rules below.
+    ignore:
+      # @types/node tracks the *lowest* supported Node line (22), not the
+      # latest release. Bump this major by hand when the engines floor moves.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # ESLint 10 is blocked by eslint-config-next 16: its bundled
+      # eslint-plugin-import / eslint-plugin-jsx-a11y only allow ESLint 9.
+      # Drop this once eslint-config-next ships a compatible plugin stack.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      # TypeScript 7 is blocked by typescript-eslint 8 (peer: typescript <6.1),
+      # a dependency of eslint-config-next 16. Drop this once that lands.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+
+    # Wait for a release to settle before opening a PR (avoids churn on a .0
+    # that gets a quick follow-up patch).
+    cooldown:
+      default-days: 5
+      semver-major-days: 14
+
+    # First matching group wins, so the coupled/topical groups come before the
+    # production/development catch-alls.
     groups:
+      # next and eslint-config-next are pinned to the exact same version and
+      # must always move together.
+      next:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+          - "@next/*"
+      # react / react-dom are version-pinned; keep their @types in the same PR.
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      # Lint stack (excluding eslint-config-next, handled by the next group).
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@eslint/*"
+          - "typescript-eslint"
+        exclude-patterns:
+          - "eslint-config-next"
+      # vitest and @vitest/coverage-v8 have an exact peer dependency on each
+      # other and must move together.
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+      commitlint:
+        patterns:
+          - "@commitlint/*"
+      # semantic-release plugins and the conventionalcommits preset they load.
+      release-tooling:
+        patterns:
+          - "semantic-release"
+          - "@semantic-release/*"
+          - "conventional-changelog-*"
+      # Everything else: minor + patch grouped, majors as individual PRs.
       production:
         dependency-type: production
         update-types: [minor, patch]
