@@ -25,6 +25,13 @@ updates:
       # a dependency of eslint-config-next 16. Drop this once that lands.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # conventional-changelog-conventionalcommits 10 needs
+      # conventional-changelog-writer 9, but @semantic-release/commit-analyzer
+      # and @semantic-release/release-notes-generator still bundle writer 8, so
+      # v10 fails at release time with a "Missing helper" error. Keep this on
+      # the v8 line until those plugins move to writer 9.
+      - dependency-name: "conventional-changelog-conventionalcommits"
+        update-types: ["version-update:semver-major"]
 
     # Wait for a release to settle before opening a PR (avoids churn on a .0
     # that gets a quick follow-up patch).
