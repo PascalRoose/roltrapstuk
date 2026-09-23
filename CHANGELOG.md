@@ -4,6 +4,16 @@ All notable changes to this project are documented here. From 0.1.0 onward this
 file is maintained by [semantic-release](https://github.com/semantic-release/semantic-release)
 from [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [1.1.0](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v1.0.1...roltrapstuk-v1.1.0) (2026-09-23)
+
+### Features
+
+* **seo:** serve Dutch and English at their own URLs and improve search metadata ([4b1231b](https://github.com/PascalRoose/roltrapstuk/commit/4b1231b1c06c97f0bb86bfb08c0fb622575696db))
+
+### Bug Fixes
+
+* use roltrapstuk.paroose.dev as the site URL ([258f8dc](https://github.com/PascalRoose/roltrapstuk/commit/258f8dcd6bb5e01329bb5b50d2b29c62e0c9048b))
+
 ## [1.0.1](https://github.com/PascalRoose/roltrapstuk/compare/roltrapstuk-v1.0.0...roltrapstuk-v1.0.1) (2026-09-09)
 
 ### Bug Fixes
