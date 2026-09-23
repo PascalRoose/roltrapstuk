@@ -25,7 +25,7 @@ flowchart TD
     end
 
     subgraph routes["Routes — app/"]
-        PAGE["/[station]/page.tsx<br/>server component · force-dynamic"]
+        PAGE["/[station]/page.tsx<br/>/en/[station]/page.tsx<br/>server component · force-dynamic"]
         APIS["GET /api/stations/[station]"]
         APIR["POST · DELETE /api/reports"]
     end
@@ -64,7 +64,8 @@ flowchart TD
     STORE --> TYPES
 ```
 
-**Read path.** `page.tsx` is a `force-dynamic` server component. It calls
+**Read path.** `StationPage` (rendered by the `force-dynamic` `page.tsx` of each
+language: `/[station]` in Dutch, `/en/[station]` in English) calls
 `readStationState()`, which loads the station's `StationDef` from the registry,
 pulls every report for the slug from the `Store`, and hands both to `aggregate()`
 to get a `StationState`. That state is passed to `StationView` as
@@ -86,8 +87,15 @@ is refused in production. The `reports` table self-creates on first query.
 
 **Client-only state.** `useReporterId` mints and persists an anonymous id in
 `localStorage`; it is sent with every report and as `?r=` on the poll so
-`aggregate()` can derive `yours`. `useSettings` holds language, theme preference
-and map flip, applied pre-hydration by the inline script in `app/layout.tsx`.
+`aggregate()` can derive `yours`. `useSettings` holds theme preference and map
+flip; the theme is applied pre-hydration by the inline script in
+`components/RootShell.tsx`. The language is not a setting — it comes from the URL
+([ADR 0007](decisions/0007-language-in-the-url.md)).
+
+**Search.** Each language has its own root layout (`app/(nl)`, `app/(en)/en`), so
+the server HTML carries the right `lang`, title, canonical, `hreflang` alternates
+and Open Graph data (`lib/seo.ts`). `StationInfo` server-renders the per-unit
+status and a short FAQ under the map, and the page ships schema.org JSON-LD.
 
 ## Data model
 

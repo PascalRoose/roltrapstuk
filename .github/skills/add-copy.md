@@ -24,8 +24,9 @@ In doubt: would the string be identical for every station? Then it's chrome.
 2. **Add it to both `en` and `nl`.** TypeScript fails the build if either is
    missing, and `lib/strings.test.ts` also asserts the two key sets match at
    runtime.
-3. **Use it**: `const t = strings(settings.lang); … t.myKey`. Client components
-   get `lang` from `useSettings()`; server components pass it down through props.
+3. **Use it**: `const t = strings(lang); … t.myKey`. The language comes from the
+   route (Dutch at `/<slug>`, English at `/en/<slug>`, see ADR 0007) and is passed
+   down through props — `StationView` takes a `lang` prop.
 4. **Verify**: `npm run typecheck && npm test`.
 
 ## Steps — station copy
@@ -38,10 +39,8 @@ escalators and `"<a> ↔ <b>"` for lifts — match `denbosch.ts`. The
 
 - Don't put station-specific text in `lib/strings.ts`, and don't import
   `lib/strings.ts` into a station file — the split is deliberate.
-- `useSettings()` server-renders with the default language (`en`) and re-renders
-  after hydration via `useSyncExternalStore`; a client component that shows `nl`
-  copy will briefly render `en` on the server. That's expected — don't try to
-  "fix" it with a guard.
-- Language and theme are applied pre-hydration by the inline script in
-  `app/layout.tsx` (`<html>` has `suppressHydrationWarning` for that reason).
+- The language is not a stored setting: it is fixed per URL, so the server HTML is
+  already in the right language. Only the theme is applied pre-hydration, by the
+  inline script in `components/RootShell.tsx` (`<html>` has
+  `suppressHydrationWarning` for that reason).
 - Copy changes need no `docs/` update.

@@ -22,7 +22,7 @@ body:
     id: url
     attributes:
       label: Page / URL
-      placeholder: https://roltrapstuk.vercel.app/denbosch
+      placeholder: https://roltrapstuk.paroose.dev/denbosch
   - type: dropdown
     id: device
     attributes:

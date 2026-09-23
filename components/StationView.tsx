@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import type { ReportKind, StationState } from "@/lib/types";
+import type { Lang, ReportKind, StationState } from "@/lib/types";
 import { getStation } from "@/lib/stations";
 import { summarise } from "@/lib/aggregate";
 import { strings } from "@/lib/strings";
@@ -21,11 +21,19 @@ async function fetcher(url: string): Promise<StationState> {
   return res.json();
 }
 
-export function StationView({ slug, initialState }: { slug: string; initialState?: StationState }) {
+export function StationView({
+  slug,
+  lang,
+  initialState,
+}: {
+  slug: string;
+  lang: Lang;
+  initialState?: StationState;
+}) {
   const station = getStation(slug);
   const settings = useSettings();
   const reporterId = useReporterId();
-  const t = strings(settings.lang);
+  const t = strings(lang);
 
   const key = reporterId
     ? `/api/stations/${slug}?r=${encodeURIComponent(reporterId)}`
@@ -122,7 +130,7 @@ export function StationView({ slug, initialState }: { slug: string; initialState
     <div className={styles.app} onClick={deselect}>
       <Header
         station={station}
-        lang={settings.lang}
+        lang={lang}
         summary={summary}
         onInfo={() => setModal("info")}
         onSettings={() => setModal("settings")}
@@ -132,17 +140,17 @@ export function StationView({ slug, initialState }: { slug: string; initialState
         <div className={styles.mapArea}>
           {error && !data ? (
             <p className={styles.state}>
-              {settings.lang === "nl" ? "Server niet bereikbaar" : "Can’t reach the server"}
+              {lang === "nl" ? "Server niet bereikbaar" : "Can’t reach the server"}
             </p>
           ) : isLoading && !data ? (
-            <p className={styles.state}>{settings.lang === "nl" ? "Laden…" : "Loading…"}</p>
+            <p className={styles.state}>{lang === "nl" ? "Laden…" : "Loading…"}</p>
           ) : (
             <StationMap
               station={station}
               state={data}
               selected={selected}
               onPick={pick}
-              lang={settings.lang}
+              lang={lang}
               flip={settings.flip}
             />
           )}
@@ -157,7 +165,7 @@ export function StationView({ slug, initialState }: { slug: string; initialState
           <DetailPanel
             unit={selectedUnit}
             unitState={selected ? data?.units[selected] : undefined}
-            lang={settings.lang}
+            lang={lang}
             now={now}
             busy={busy}
             justReported={justReported}
@@ -167,8 +175,10 @@ export function StationView({ slug, initialState }: { slug: string; initialState
         </div>
       </div>
 
-      {modal === "info" && <InfoModal lang={settings.lang} onClose={() => setModal(null)} />}
-      {modal === "settings" && <SettingsModal settings={settings} onClose={() => setModal(null)} />}
+      {modal === "info" && <InfoModal lang={lang} onClose={() => setModal(null)} />}
+      {modal === "settings" && (
+        <SettingsModal settings={settings} lang={lang} slug={slug} onClose={() => setModal(null)} />
+      )}
     </div>
   );
 }
