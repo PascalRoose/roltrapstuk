@@ -6,7 +6,7 @@ summary: Write a station's StationDef (units, tunnel-map geometry, EN/NL copy), 
 # Add a station
 
 A station is **one file** under `lib/stations/` plus a one-line registration in
-`lib/stations/index.ts`. It then gets a `/<slug>` route, a sitemap entry, and
+`lib/stations/index.ts`. It then gets a `/<slug>` (Dutch) and `/en/<slug>` route, sitemap entries, and
 works with the existing API and UI unchanged.
 
 ## Steps
@@ -18,6 +18,9 @@ works with the existing API and UI unchanged.
      (`denbosch`, `utrecht`, `eindhoven`). This is the route.
    - `name`: the real station name for display (`'s-Hertogenbosch`,
      `Utrecht Centraal`).
+   - `seo`: search-result `title` (≤ 60 chars, lead with "Roltrap & lift …") and
+     `description` (≤ 170 chars), each in `nl` and `en`. `lib/seo.test.ts`
+     enforces the lengths.
 2. **Register** it in `lib/stations/index.ts`: import the export and add it to the
    `STATIONS` map. Leave `DEFAULT_STATION` alone unless asked to change it.
 3. **Verify**:

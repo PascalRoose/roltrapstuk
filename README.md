@@ -144,7 +144,8 @@ issues: please use a
 
 ```
 app/                        routes, API handlers, metadata (robots/sitemap/manifest)
-  [station]/page.tsx        server component — reads state, renders StationView
+  (nl)/[station]/page.tsx   Dutch page — server component, renders StationPage
+  (en)/en/[station]/page.tsx  English page (same, `lang="en"`)
 lib/
   stations/                 per-station definitions (units, map geometry, copy)
   aggregate.ts              report log → per-unit status
@@ -152,7 +153,7 @@ lib/
   strings.ts                en / nl copy
 components/                 StationView, StationMap, Header, DetailPanel
   modals/                   Modal shell, Info/Settings, SegmentedControl
-hooks/                      useSettings (localStorage + OS theme), useReporterId
+hooks/                      useSettings (theme + map flip), useReporterId
 db/ scripts/                schema + seed script
 test/                       vitest helpers (unit tests are colocated as *.test.ts)
 .devcontainer/              VS Code / Codespaces container (Node 22)

@@ -47,6 +47,15 @@ export interface Strings {
   zoomIn: string;
   zoomOut: string;
   zoomReset: string;
+  // crawlable page content + 404
+  unitsTitle: string;
+  unitsIntro: (station: string) => string;
+  faqTitle: string;
+  faq: { q: string; a: string }[];
+  switchLang: string;
+  notFoundTitle: string;
+  notFoundText: string;
+  notFoundGo: (station: string) => string;
 }
 
 const en: Strings = {
@@ -96,6 +105,28 @@ const en: Strings = {
   zoomIn: "Zoom in",
   zoomOut: "Zoom out",
   zoomReset: "Reset zoom",
+  unitsTitle: "Escalators and lifts right now",
+  unitsIntro: (station) =>
+    `Live status of every escalator and lift at ${station} station, based on reports from travellers. Tap the map above to see the latest report for a unit.`,
+  faqTitle: "Frequently asked questions",
+  faq: [
+    {
+      q: "How do I know if an escalator or lift is broken?",
+      a: "Every escalator and lift on the map has a colour: green for working, red for broken and orange for a single unconfirmed report. Tap one to see when it was last reported.",
+    },
+    {
+      q: "Where does the status come from?",
+      a: "Only from travellers. Two reports the same way settle a unit as broken or working, and one report the other way cancels an unconfirmed one.",
+    },
+    {
+      q: "How do I report a broken escalator or lift?",
+      a: "Tap the escalator or lift on the map and choose “Report as broken” or “Report as working”. No account is needed, and you can undo your report for 15 minutes.",
+    },
+  ],
+  switchLang: "Nederlandse versie",
+  notFoundTitle: "Station not found",
+  notFoundText: "There's no status page for that station yet.",
+  notFoundGo: (station) => `Go to ${station}`,
 };
 
 const nl: Strings = {
@@ -145,6 +176,28 @@ const nl: Strings = {
   zoomIn: "Inzoomen",
   zoomOut: "Uitzoomen",
   zoomReset: "Zoom herstellen",
+  unitsTitle: "Roltrappen en liften op dit moment",
+  unitsIntro: (station) =>
+    `Actuele status van alle roltrappen en liften op station ${station}, gebaseerd op meldingen van reizigers. Klik op de kaart hierboven voor de laatste melding van een roltrap of lift.`,
+  faqTitle: "Veelgestelde vragen",
+  faq: [
+    {
+      q: "Hoe zie ik of een roltrap of lift kapot is?",
+      a: "Elke roltrap en lift op de kaart heeft een kleur: groen is werkend, rood is kapot en oranje is één onbevestigde melding. Klik erop om te zien wanneer er voor het laatst iets is gemeld.",
+    },
+    {
+      q: "Waar komt de status vandaan?",
+      a: "Alleen van reizigers. Twee meldingen dezelfde kant op maken een roltrap of lift definitief kapot of werkend, en één melding de andere kant op heft een onbevestigde melding op.",
+    },
+    {
+      q: "Hoe meld ik een kapotte roltrap of lift?",
+      a: "Klik op de roltrap of lift op de kaart en kies “Meld als kapot” of “Meld als werkend”. Een account is niet nodig en je kunt je melding 15 minuten lang ongedaan maken.",
+    },
+  ],
+  switchLang: "English version",
+  notFoundTitle: "Station niet gevonden",
+  notFoundText: "Er is nog geen statuspagina voor dit station.",
+  notFoundGo: (station) => `Ga naar ${station}`,
 };
 
 const TABLE: Record<Lang, Strings> = { en, nl };

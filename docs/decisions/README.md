@@ -15,6 +15,7 @@ Copy [`TEMPLATE.md`](TEMPLATE.md) for a new one; number it in sequence.
 | [0004](0004-neon-serverless-driver-with-in-memory-fallback.md) | Neon serverless driver + in-memory fallback store | Accepted |
 | [0005](0005-semantic-release-on-every-push.md) | semantic-release on every push to `main` | Accepted |
 | [0006](0006-fixed-canvas-station-map.md) | Fixed 402×620 canvas for the station map | Accepted |
+| [0007](0007-language-in-the-url.md) | Serve each language at its own URL, Dutch by default | Accepted |
 
 ADRs 0001–0006 were recorded on 2026-09-09 from the implementation as it already
 stood; the decisions themselves date to the project's start.

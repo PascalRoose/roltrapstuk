@@ -11,6 +11,16 @@ export const denBosch: StationDef = {
   slug: "denbosch",
   name: "'s-Hertogenbosch",
   kicker: { en: "TRAIN STATION", nl: "TREINSTATION" },
+  seo: {
+    title: {
+      en: "Escalator & lift status 's-Hertogenbosch station",
+      nl: "Roltrap & lift 's-Hertogenbosch station – actuele status",
+    },
+    description: {
+      en: "Is an escalator or lift broken at 's-Hertogenbosch station? See the live status of every escalator and lift, reported by travellers, and report a fault yourself.",
+      nl: "Is de roltrap of lift kapot op station 's-Hertogenbosch? Bekijk de actuele status van alle roltrappen en liften, gemeld door reizigers, en meld zelf een storing.",
+    },
+  },
   ends: {
     top: { en: "CITY CENTER", nl: "CENTRUM" },
     bottom: { en: "PALEISKWARTIER", nl: "PALEISKWARTIER" },

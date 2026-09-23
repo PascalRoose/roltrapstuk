@@ -1,17 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import type { Lang, Theme, ThemePref } from "@/lib/types";
+import type { Theme, ThemePref } from "@/lib/types";
 
 const KEY = "roltrapstuk.settings";
 
 interface Settings {
-  lang: Lang;
   theme: ThemePref;
   flip: boolean;
 }
 
-const DEFAULTS: Settings = { lang: "en", theme: "system", flip: false };
+const DEFAULTS: Settings = { theme: "system", flip: false };
 
 function readSettings(): Settings {
   try {
@@ -19,7 +18,6 @@ function readSettings(): Settings {
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<Settings>;
       return {
-        lang: parsed.lang === "nl" || parsed.lang === "en" ? parsed.lang : DEFAULTS.lang,
         theme:
           parsed.theme === "light" || parsed.theme === "dark" || parsed.theme === "system"
             ? parsed.theme
@@ -90,11 +88,9 @@ export function useSettings(): SettingsApi {
 
   useEffect(() => {
     document.documentElement.dataset.theme = resolvedTheme;
-    document.documentElement.lang = parsed.lang;
-  }, [resolvedTheme, parsed.lang]);
+  }, [resolvedTheme]);
 
   return {
-    lang: parsed.lang,
     theme: parsed.theme,
     flip: parsed.flip,
     resolvedTheme,

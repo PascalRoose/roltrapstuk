@@ -44,10 +44,11 @@ on memory. In particular: route `params` and `searchParams` are `Promise`s;
 | `lib/store.ts` | Data access. Postgres via `@neondatabase/serverless` when `DATABASE_URL` is set, else an in-memory store (dev only; refused in production). |
 | `lib/stationState.ts` | `store` + `aggregate` → the shape the client renders. |
 | `app/api/` | `GET /api/stations/[station]`, `POST` / `DELETE /api/reports`. |
-| `app/[station]/page.tsx` | Server component; `force-dynamic`; reads state and renders `StationView`. |
+| `app/(nl)/[station]/page.tsx`, `app/(en)/en/[station]/page.tsx` | Dutch (`/<slug>`) and English (`/en/<slug>`) pages; `force-dynamic`; render `StationPage` (state → `StationView` + crawlable `StationInfo` + JSON-LD). Each language has its own root layout; see ADR 0007. |
+| `lib/seo.ts` | Per-page metadata (canonical, `hreflang`, Open Graph), URL helpers, JSON-LD. |
 | `components/StationView.tsx` | Top-level client component: SWR polling, selection, report/undo, modals. |
 | `components/StationMap.tsx` | The tunnel schematic. Renders a fixed 402×620 canvas scaled to fit via a `ResizeObserver`; `flip` rotates it 180° with counter-rotated labels. |
-| `hooks/` | `useSettings` (localStorage + OS theme, via `useSyncExternalStore`), `useReporterId` (anon per-device id). |
+| `hooks/` | `useSettings` (theme + map flip in localStorage, via `useSyncExternalStore`), `useReporterId` (anon per-device id). |
 
 ## Conventions & gotchas
 
@@ -66,8 +67,9 @@ on memory. In particular: route `params` and `searchParams` are `Promise`s;
   server modules import under Node — keep that alias if you add server-only code.
 - **No secrets in the repo.** `.env.example` documents the env vars
   (`DATABASE_URL`, `NEXT_PUBLIC_SITE_URL`). Local dev works with neither set.
-- **Theme/lang** are applied pre-hydration by an inline script in
-  `app/layout.tsx`; `<html>` has `suppressHydrationWarning` for that reason.
+- **Theme** is applied pre-hydration by an inline script in
+  `components/RootShell.tsx`; `<html>` has `suppressHydrationWarning` for that
+  reason. **Language** is per-URL (`/` Dutch, `/en/` English), not a setting.
 - **Security headers** live in `next.config.ts`. A full script CSP is a known
   follow-up (needs a nonce/middleware).
 

@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import type { Lang, ThemePref } from "@/lib/types";
 import { strings } from "@/lib/strings";
+import { stationPath } from "@/lib/seo";
 import type { SettingsApi } from "@/hooks/useSettings";
 import { Modal } from "./Modal";
 import { SegmentedControl } from "./SegmentedControl";
@@ -9,12 +11,17 @@ import styles from "./content.module.css";
 
 export function SettingsModal({
   settings,
+  lang,
+  slug,
   onClose,
 }: {
   settings: SettingsApi;
+  lang: Lang;
+  slug: string;
   onClose: () => void;
 }) {
-  const t = strings(settings.lang);
+  const t = strings(lang);
+  const router = useRouter();
 
   return (
     <Modal title={t.settings} onClose={onClose}>
@@ -24,8 +31,9 @@ export function SettingsModal({
         <div className={styles.label}>{t.language}</div>
         <SegmentedControl<Lang>
           label={t.language}
-          value={settings.lang}
-          onChange={(lang) => settings.update({ lang })}
+          value={lang}
+          // Each language has its own URL (see ADR 0007), so switching navigates.
+          onChange={(next) => router.push(stationPath(slug, next))}
           options={[
             { value: "en", label: "English" },
             { value: "nl", label: "Nederlands" },

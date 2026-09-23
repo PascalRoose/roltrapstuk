@@ -52,6 +52,11 @@ export interface StationDef {
   /** display name, e.g. 's-Hertogenbosch */
   name: string;
   kicker: Record<Lang, string>;
+  /** search-result title (≤ 60 chars) and meta description, per language */
+  seo: {
+    title: Record<Lang, string>;
+    description: Record<Lang, string>;
+  };
   ends: {
     top: Record<Lang, string>;
     bottom: Record<Lang, string>;
